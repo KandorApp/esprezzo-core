@@ -40,7 +40,7 @@ defmodule EsprezzoCore.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:edeliver, "~> 1.4.4"},
-      {:distillery, ">= 0.8.0", warn_missing: false},
+      {:distillery, "~> 1.5", runtime: false}
     ]
   end
 
