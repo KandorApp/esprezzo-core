@@ -6,8 +6,8 @@ BUILD_HOST="core-1.esprezzo.io"
 BUILD_USER="jerome"
 BUILD_AT="/tmp/edeliver/esprezzo_core/builds"
 
-# STAGING_HOSTS="stage.myapp.com"
-# STAGING_USER="web"
+STAGING_HOSTS="core-staging.esprezzo.io"
+STAGING_USER="jerome"
 DELIVER_TO="/home/web"
 
 
