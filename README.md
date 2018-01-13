@@ -8,3 +8,16 @@ To start your EsprezzoCore server:
 
 # esprezzo-core
 Esprezzo core is a chain fabric server that allows for an unlimited number of application specific sidechains as well as a global cryptocurrency ledger.
+
+
+# Coding Conventions
+
+## Specs
+
+## Testing
+
+## Dialyzer
+Dialyzer is a....
+
+Run dialyzer with `mix ...`
+

@@ -15,6 +15,8 @@ defmodule EsprezzoCore.Fabric.Schemas.Block do
     field :data, :string
     field :nonce, :integer
     field :hash, :string
+    field :outputs, {:array, :string}
+
     timestamps()
   end
 
