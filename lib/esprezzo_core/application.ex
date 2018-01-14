@@ -10,8 +10,13 @@ defmodule EsprezzoCore.Application do
     children = [
       # Start the Ecto repository
       supervisor(EsprezzoCore.Repo, []),
+
+      # Start P2P Networking
+      supervisor(EsprezzoCore.Supervisor, []),
+
       # Start the endpoint when the application starts
-      supervisor(EsprezzoCoreWeb.Endpoint, []),
+      # supervisor(EsprezzoCoreWeb.Endpoint, [])
+      
       # Start your own worker by calling: EsprezzoCore.Worker.start_link(arg1, arg2, arg3)
       # worker(EsprezzoCore.Worker, [arg1, arg2, arg3]),
     ]

@@ -7,10 +7,20 @@ defmodule EsprezzoCore.Mixfile do
       version: "0.0.1",
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
+      compilers: [:rustler, :phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+	    rustler_crates: rustler_crates()
+    ]
+  end
+
+  def rustler_crates do
+    [
+      peernet_protocols: [
+        path: "native/peernet_protocols",
+        mode: (if Mix.env == :prod, do: :release, else: :debug)
+      ]
     ]
   end
 
@@ -39,6 +49,7 @@ defmodule EsprezzoCore.Mixfile do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:rustler, "~> 0.10.1"},
       {:edeliver, "~> 1.4.4"},
       {:distillery, "~> 1.5", runtime: false}
     ]
@@ -54,7 +65,8 @@ defmodule EsprezzoCore.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      "test": ["ecto.create --quiet", "ecto.migrate", "test"],
+      "esp.start": ["phx.server"]
     ]
   end
 end

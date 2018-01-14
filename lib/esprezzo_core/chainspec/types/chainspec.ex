@@ -1,7 +1,7 @@
 defmodule EsprezzoCore.ChainSpec do
   
   alias EsprezzoCore.ChainSpec.Account
-
+  
   defstruct [:name, :c_engine, :params, :genesis, :accounts]
 
   @type t :: %__MODULE__{
