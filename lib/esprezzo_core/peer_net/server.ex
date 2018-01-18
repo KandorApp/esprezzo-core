@@ -4,6 +4,7 @@ defmodule EsprezzoCore.PeerNet.Server do
   require IEx
   use GenServer
   alias EsprezzoCore.PeerNet.TCPHandler
+  alias EsprezzoCore.PeerNet
   
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -19,6 +20,7 @@ defmodule EsprezzoCore.PeerNet.Server do
     Logger.info(fn ->
       "Listening for connections on port #{Keyword.get(opts, :port)}"
     end)
+    #PeerNet.bootstrap_connections()
     {:ok, pid}
   end
 

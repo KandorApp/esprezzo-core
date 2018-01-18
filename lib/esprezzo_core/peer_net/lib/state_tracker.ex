@@ -2,11 +2,16 @@ defmodule EsprezzoCore.PeerNet.StateTracker do
   use Supervisor
 
   alias EsprezzoCore.PeerNet.Peer
+  alias EsprezzoCore.PeerNet
 
   def start_link(config) do
     Supervisor.start_link(__MODULE__, config, name: __MODULE__)
   end
 
+  @doc"""
+  Attempts to connect to all default peers
+  on initialization
+  """
   def init(_config) do
     Supervisor.init([Peer], strategy: :simple_one_for_one)
   end

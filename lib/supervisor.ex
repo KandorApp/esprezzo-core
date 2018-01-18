@@ -7,14 +7,16 @@ defmodule EsprezzoCore.Supervisor do
     Supervisor.start_link(__MODULE__, [], name: :p2p_server_supervisor)
   end
 
-
-  # Callbacks
+  @doc"""
+  Initialize Primary Supervisor
+  """
   def init([]) do
     children = []
     unless @quiet do
       children = children ++ [ 
         worker(EsprezzoCore.PeerNet.Server, [[{:name, PeerNetServer},{:port, 30343}]], [id: "PeerNetServer1"]),       
-        worker(EsprezzoCore.PeerNet.StateTracker, [[{:name, PeerStateTracker}]], [id: "PeerStateTracker"])
+        worker(EsprezzoCore.PeerNet.StateTracker, [[{:name, PeerStateTracker}]], [id: "PeerStateTracker"]),
+        worker(EsprezzoCore.Command,[CommandWorker])
       ] 
     end
     supervise(children, strategy: :one_for_one)
