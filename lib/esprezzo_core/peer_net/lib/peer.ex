@@ -33,6 +33,14 @@ defmodule EsprezzoCore.PeerNet.Peer do
     Logger.warn(fn ->
       "Received message #{inspect(message)} from #{inspect(socket)}. Echoing it back // Control goes here"
     end)
+    case message do
+      "PING" ->
+        transport.send(socket, "PONG")
+      message ->
+        Logger.warn(fn ->
+          "Received message #{inspect(message)} from #{inspect(socket)}."
+        end)
+    end
     transport.send(socket, message)
     {:noreply, state}
   end

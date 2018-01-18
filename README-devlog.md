@@ -7,9 +7,9 @@ Server
 StateTracker
 
 Setup Connections
+Default P2P Port 30343
 
 
 NEXT:
 Rust Crypto nif?
-Default P2P Port 30343
-
+Local config per node.. select rpc services to start etc
