@@ -49,9 +49,10 @@ defmodule EsprezzoCore.PeerNet.Peer do
     #     end)
     # end
     Logger.warn(fn ->
-            "Received message #{inspect(message)} from #{inspect(socket)}."
-          end)
+      "Received message #{inspect(message)} from #{inspect(socket)}."
+    end)
     transport.send(socket, message)
+    IEx.pry
     {:noreply, state}
   end
 
