@@ -13,13 +13,13 @@ defmodule EsprezzoCore.PeerNet.Client do
           {n, _} = Integer.parse(x)
           n
         end )
-    opts = [:binary, :inet, active: true, packet: :line]
+    #opts = [:binary, :inet, active: true, packet: :line]
     # with {:ok, socket} = :gen_tcp.connect({a, b, c, d}, port, opts) do
     #   {:ok, pid} = StateTracker.add_peer(socket, :gen_tcp)
     #   :gen_tcp.controlling_process(socket, pid)
     #   {:ok, pid}
     # end
-    case :gen_tcp.connect({a, b, c, d}, port, opts) do
+    case :gen_tcp.connect({a, b, c, d}, port, active: true) do
       {:ok, socket} ->  
         {:ok, pid} = StateTracker.add_peer(socket, :gen_tcp)
         :gen_tcp.controlling_process(socket, pid)
