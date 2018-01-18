@@ -23,6 +23,7 @@ defmodule EsprezzoCore.PeerNet.Client do
       {:ok, socket} ->  
         {:ok, pid} = StateTracker.add_peer(socket, :gen_tcp)
         :gen_tcp.controlling_process(socket, pid)
+        {:ok, pid}
       {:error, reason} ->
         Logger.error( fn ->
           "Could not connect to remote host"
