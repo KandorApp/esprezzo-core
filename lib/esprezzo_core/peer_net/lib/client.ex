@@ -19,7 +19,7 @@ defmodule EsprezzoCore.PeerNet.Client do
     #   :gen_tcp.controlling_process(socket, pid)
     #   {:ok, pid}
     # end
-    tcp_options = [:binary, {:packet, 4}, :line, active: false, reuseaddr: true]
+    tcp_options = [:binary, {:packet, 4}, active: true, reuseaddr: true]
     case :gen_tcp.connect({a, b, c, d}, port, tcp_options) do
       {:ok, socket} ->  
         {:ok, pid} = StateTracker.add_peer(socket, :gen_tcp)
