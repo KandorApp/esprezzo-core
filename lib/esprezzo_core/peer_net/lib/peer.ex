@@ -41,6 +41,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
         Logger.warn(fn ->
           "Received PING // Sending PONG}."
         end)
+        IEx.pry
         transport.send(socket, "PONG")
       message ->
         Logger.warn(fn ->
