@@ -20,7 +20,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   # Server
 
   def handle_call({:send_message, message}, _, %{socket: socket, transport: transport} = state) do
-    Logger.debug(fn ->
+    Logger.warn(fn ->
       "Sending message #{inspect(message)} to #{inspect(socket)}"
     end)
 
@@ -30,7 +30,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
-    Logger.debug(fn ->
+    Logger.warn(fn ->
       "Received message #{inspect(message)} from #{inspect(socket)}. Echoing it back // Control goes here"
     end)
     transport.send(socket, message)
@@ -42,7 +42,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   def handle_info({:tcp_error, reason}, %{socket: socket} = state) do
-    Logger.debug(fn ->
+    Logger.warn(fn ->
       "TCP Error: #{inspect(reason)}. socket=#{inspect(socket)}"
     end)
 
