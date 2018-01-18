@@ -4,6 +4,9 @@ defmodule EsprezzoCore.PeerNet do
   alias EsprezzoCore.PeerNet.Client
   alias EsprezzoCore.PeerNet.Peer
   
+  """
+  EsprezzoCore.PeerNet.peers
+  """
   def peers do
     StateTracker.list_peers()
   end
@@ -21,16 +24,22 @@ defmodule EsprezzoCore.PeerNet do
   def connect(ip, port) do
     Client.connect(ip, port)
   end
-
-  def peers do
-    PeerTracker.list_peers()
-  end
-
+ 
   """
-  EsprezzoCore.PeerNet.send_message(pid, "Hello, Networking!")
+  EsprezzoCore.PeerNet.send_message(pid, "PING")
   """
   def send_message(peer, message) do
     Peer.send_message(peer, message)
+  end
+
+  """
+  EsprezzoCore.PeerNet.ping_all()
+  """
+  def ping_all do
+    __MODULE__.peers()
+      |> Enum.each(fn pid -> 
+        EsprezzoCore.PeerNet.send_message(pid, "PING")
+      end)
   end
 
 
