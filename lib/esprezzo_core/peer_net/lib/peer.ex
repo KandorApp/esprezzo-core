@@ -35,7 +35,9 @@ defmodule EsprezzoCore.PeerNet.Peer do
     end)
     case message do
       "PING" ->
-        "Received PING // Sending PONG}."
+        Logger.warn(fn ->
+          "Received PING // Sending PONG}."
+        end)
         transport.send(socket, "PONG")
       message ->
         Logger.warn(fn ->
