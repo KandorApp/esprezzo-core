@@ -36,23 +36,24 @@ defmodule EsprezzoCore.PeerNet.Peer do
     Logger.warn(fn ->
       "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
     end)
-    # case message do
-    #   "PING" ->
-    #     Logger.warn(fn ->
-    #       "Received PING // Sending PONG}."
-    #     end)
-    #     IEx.pry
-    #     transport.send(socket, "PONG")
-    #   message ->
-    #     Logger.warn(fn ->
-    #       "Received message #{inspect(message)} from #{inspect(socket)}."
-    #     end)
-    # end
+    case message do
+      "PING" ->
+        Logger.warn(fn ->
+          "Received PING from #{inspect(socket)} // Sending PONG}."
+        end)
+        transport.send(socket, "PONG")
+      "PONG" ->
+        Logger.warn(fn ->
+          "Received PONG // from #{inspect(socket)}}."
+        end)
+      message ->
+        Logger.warn(fn ->
+          "Received message #{inspect(message)} from #{inspect(socket)}."
+        end)
+    end
     Logger.warn(fn ->
       "Received message #{inspect(message)} from #{inspect(socket)}."
     end)
-    transport.send(socket, message)
-    IEx.pry
     {:noreply, state}
   end
 
