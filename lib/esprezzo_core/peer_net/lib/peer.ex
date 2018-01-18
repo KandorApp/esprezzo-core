@@ -18,17 +18,20 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   # Server
-
+  @doc"""
+  SEND network message to remote connection
+  """
   def handle_call({:send_message, message}, _, %{socket: socket, transport: transport} = state) do
     Logger.warn(fn ->
       "Sending message #{inspect(message)} to #{inspect(socket)}"
     end)
-
     :ok = transport.send(socket, message)
-
     {:reply, :ok, state}
   end
 
+  @doc"""
+  RECV network message from remote connection
+  """
   def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
     Logger.warn(fn ->
       "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
@@ -44,7 +47,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
           "Received message #{inspect(message)} from #{inspect(socket)}."
         end)
     end
-    transport.send(socket, message)
+    #transport.send(socket, message)
     {:noreply, state}
   end
 
