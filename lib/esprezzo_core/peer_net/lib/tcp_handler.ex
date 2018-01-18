@@ -9,22 +9,23 @@ defmodule EsprezzoCore.PeerNet.TCPHandler do
          
   def init(ref, socket, transport, _Opts = []) do
     :ok = :ranch.accept_ack(ref)
-    :ok = transport.setopts(socket, [{:active, true}])
+    tcp_options = [:binary, {:packet, 4}, :line, active: false, reuseaddr: true]
+    :ok = transport.setopts(socket, tcp_options)
     {:ok, pid} = StateTracker.add_peer(socket, transport)
     :ranch_tcp.controlling_process(socket, pid)
     #loop(socket, transport)
   end
 
-  def loop(socket, transport) do
-    case transport.recv(socket, 0, 5000) do
-      {:ok, data} ->
-        Logger.info "Network Data Received"
-        transport.send(socket, data)
-        loop(socket, transport)
-      _ ->
-        :ok = transport.close(socket)
-    end
-  end
+  # def loop(socket, transport) do
+  #   case transport.recv(socket, 0, 5000) do
+  #     {:ok, data} ->
+  #       Logger.info "Network Data Received"
+  #       transport.send(socket, data)
+  #       loop(socket, transport)
+  #     _ ->
+  #       :ok = transport.close(socket)
+  #   end
+  # end
 
   # def loop(socket, transport) do
   #   case transport.recv(socket, 12, 5000) do

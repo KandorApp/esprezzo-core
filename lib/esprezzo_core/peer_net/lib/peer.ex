@@ -36,6 +36,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
     # Logger.warn(fn ->
     #   "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
     # end)
+    IEx.pry
     case message do
       "PING" ->
         Logger.warn(fn ->
