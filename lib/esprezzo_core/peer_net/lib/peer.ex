@@ -2,7 +2,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   use GenServer, restart: :temporary
 
   require Logger
-
+  require IEx
   # Client
 
   def start_link(_, config) do
