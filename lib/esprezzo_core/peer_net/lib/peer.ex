@@ -31,10 +31,11 @@ defmodule EsprezzoCore.PeerNet.Peer do
 
   def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
     Logger.warn(fn ->
-      "Received message #{inspect(message)} from #{inspect(socket)}. Echoing it back // Control goes here"
+      "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
     end)
     case message do
       "PING" ->
+        "Received PING // Sending PONG}."
         transport.send(socket, "PONG")
       message ->
         Logger.warn(fn ->

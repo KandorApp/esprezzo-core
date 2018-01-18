@@ -12,6 +12,13 @@ defmodule EsprezzoCore.PeerNet do
   end
 
   """
+  EsprezzoCore.PeerNet.count_peers
+  """
+  def count_peers do
+    StateTracker.count_peers()
+  end
+
+  """
   EsprezzoCore.PeerNet.bootstrap_connections()
   """
   def bootstrap_connections do
