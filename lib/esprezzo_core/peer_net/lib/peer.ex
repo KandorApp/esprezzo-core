@@ -33,9 +33,9 @@ defmodule EsprezzoCore.PeerNet.Peer do
   RECV network message from remote connection
   """
   def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
-    Logger.warn(fn ->
-      "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
-    end)
+    # Logger.warn(fn ->
+    #   "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
+    # end)
     case message do
       "PING" ->
         Logger.warn(fn ->
@@ -51,9 +51,6 @@ defmodule EsprezzoCore.PeerNet.Peer do
           "Received message #{inspect(message)} from #{inspect(socket)}."
         end)
     end
-    Logger.warn(fn ->
-      "Received message #{inspect(message)} from #{inspect(socket)}."
-    end)
     {:noreply, state}
   end
 
