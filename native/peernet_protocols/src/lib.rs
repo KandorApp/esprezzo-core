@@ -22,7 +22,7 @@ rustler_export_nifs! {
     "Elixir.EsprezzoCore.PeerNet.Protocols",
     [
         ("map_entries_sorted", 1, wire_protocols::map_entries_sorted),
-        ("get_definition", 2, wire_protocols::get_definition)    
+        ("get_definition", 0, wire_protocols::get_definition)    
     ],
     None
 }

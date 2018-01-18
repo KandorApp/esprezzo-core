@@ -1,6 +1,7 @@
 use rustler::{NifEnv, NifTerm, NifEncoder, NifResult};
 use rustler::types::map::NifMapIterator;
 use rustler::types::tuple::make_tuple;
+extern crate hex;
 
 #[derive(Debug)]
 struct ProtoDef<'a> {
@@ -38,22 +39,21 @@ pub fn map_entries_sorted<'a>(env: NifEnv<'a>, args: &[NifTerm<'a>]) -> NifResul
 
 //
 // http://hansihe.com/2017/02/05/rustler-safe-erlang-elixir-nifs-in-rust.html
-//
+// println!("{}", hex_string);
 pub fn get_definition<'a>(env: NifEnv<'a>, args: &[NifTerm<'a>]) -> NifResult<NifTerm<'a>> {
-    //let setting: ProtoDef = ProtoDef { name: "SUCCESS", term_index: "1" };
-    let n = "settink"; 
-    let v = "valuer"; 
+
+    let mut vec: Vec<(String, &str)> = Vec::new();
+    let hello_msg            = (format!("{:#X}", 0), "hello"); //returns version if compatible or disconnect
+    let disco_msg            = (format!("{:#X}", 1), "disconnect"); // end session
+    let req_block_hashes_msg = (format!("{:#X}", 2), "get_block_hashes"); //request hashes only
     
-    let num1: i64 = args[0].decode()?;
-    let num2: i64 = args[1].decode()?;
+    vec.push(hello_msg);
+    vec.push(disco_msg);
+    vec.push(req_block_hashes_msg);
 
-    // let mut steez = ::rustler::types::map::map_new(env)
-    // .map_put(n, v).ok().unwrap();
-
-    let out_n: NifTerm = (n).encode(env);
-    let out_v: NifTerm = (v).encode(env);
-
-    let out_term: NifTerm = (v).encode(env);
-
-    Ok((atoms::ok(), out_term).encode(env))
+    let erlang_pairs: Vec<NifTerm> =
+        vec.into_iter()
+        .map(|(key, value)| make_tuple(env, &[key.encode(env), value.encode(env)]))
+        .collect();
+    Ok(erlang_pairs.encode(env))
 }

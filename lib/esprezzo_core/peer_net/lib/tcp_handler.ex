@@ -1,5 +1,6 @@
 defmodule EsprezzoCore.PeerNet.TCPHandler do
   require Logger
+  alias EsprezzoCore.PeerNet.StateTracker
 
   def start_link(ref, socket, transport, opts) do
     pid = spawn_link(__MODULE__, :init, [ref, socket, transport, opts])
@@ -8,7 +9,10 @@ defmodule EsprezzoCore.PeerNet.TCPHandler do
          
   def init(ref, socket, transport, _Opts = []) do
     :ok = :ranch.accept_ack(ref)
-    loop(socket, transport)
+    :ok = transport.setopts(socket, [{:active, true}])
+    {:ok, pid} = StateTracker.add_peer(socket, transport)
+    :ranch_tcp.controlling_process(socket, pid)
+    #loop(socket, transport)
   end
 
   def loop(socket, transport) do

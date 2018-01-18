@@ -34,7 +34,7 @@ To start your EsprezzoCore server (Development):
   * Start EsprezzoCore with interactive console `iex -S mix esp.start`
 
 
-
+# Default P2P Port 30343
 # Contribution
 
 ## Coding Conventions
