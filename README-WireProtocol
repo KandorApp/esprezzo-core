@@ -10,3 +10,11 @@ Old NodeIDs expire after ... 1 hr?
 set "my ip" and avoid it for connections and pings
 -OR-
 compare node_uuids with connection return since "my_ip" will not be avail on the local iface
+
+NEXT
+send HELLO and compare versions.. if OK then add to PeerManager.authorized_peers
+authorized_peers should be checked before each actions besides CONNECT and HELLO
+
+Get timestamps right so connected_peers that are not authorized_peers after 1 minute are disconnected
+
+make sure hanging conditions are safe

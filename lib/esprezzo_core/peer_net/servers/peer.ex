@@ -44,6 +44,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
     GenServer.call(pid, :get_state, :infinity)
   end
 
+  
   # Server
   @doc"""
   SEND network message to remote connection
@@ -95,6 +96,13 @@ defmodule EsprezzoCore.PeerNet.Peer do
     {:stop, :normal, state}
   end
   
+  @doc"""
+  Periodically refresh peerlist by querying remotes
+  remote should return current active peers only
+  every host should be pinging each other consistently
+  if one misses three consecutive responses remove it from
+  the list by calling the timeout process message or returning {:stop, :normal, state}
+  """
   def handle_info(:refresh_node, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
     Logger.warn(fn ->
       "refreshing_node... #{remote_addr}"
@@ -107,6 +115,6 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   defp schedule_refresh() do
-    Process.send_after(self(), :refresh_node, 10000)
+    Process.send_after(self(), :refresh_node, 333)
   end
 end
