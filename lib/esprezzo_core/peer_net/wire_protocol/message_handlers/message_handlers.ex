@@ -1,16 +1,16 @@
 defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   @moduledoc"""
   Parser/Router for incoming commands
-  is this a parser or a handler.. identity crisis?
+  is this a parser or a handler?
   """
-
   require Logger
-  alias EsprezzoCore.PeerNet
   require IEx
+  alias EsprezzoCore.PeerNet
+  alias EsprezzoCore.PeerNet.WireProtocol.Commands
+
 
   def direct(message, socket, transport) do
 
-    IEx.pry
     command_struct = Poison.decode!(message)
 
     case command_struct["command"] do
