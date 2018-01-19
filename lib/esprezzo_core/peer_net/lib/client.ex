@@ -4,7 +4,7 @@ defmodule EsprezzoCore.PeerNet.Client do
   alias EsprezzoCore.PeerNet.PeerTracker
 
   @doc"""
-  EsprezzoCore.PeerNet.Client.connect("127.0.0.1", 19876)
+  EsprezzoCore.PeerNet.Client.connect("127.0.0.1", 30343)
   """
   def connect(address, port) do
     [a,b,c,d] = String.split(address, ".")

@@ -12,7 +12,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
 
     command_struct = Poison.decode!(message)
 
-    case command_struct.command do
+    case command_struct["command"] do
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG}."
