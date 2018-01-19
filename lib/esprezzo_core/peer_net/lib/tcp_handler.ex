@@ -13,7 +13,7 @@ defmodule EsprezzoCore.PeerNet.TCPHandler do
     :ok = :ranch.accept_ack(ref)
     tcp_options = [:binary, {:packet, 4}, active: true, reuseaddr: true]
     :ok = transport.setopts(socket, tcp_options)
-    {:ok, pid} = PeerTracker.add_peer(socket, transport, node_uuid)
+    {:ok, pid} = PeerTracker.add_peer(socket, transport, [{:node_uuid, node_uuid}])
     :ranch_tcp.controlling_process(socket, pid)
     #loop(socket, transport)
   end
