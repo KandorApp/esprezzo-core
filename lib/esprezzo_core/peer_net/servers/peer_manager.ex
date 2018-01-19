@@ -25,7 +25,7 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   }
   """
   def init(opts) do
-    PeerNet.bootstrap_connections()
+    PeerNet.bootstrap_connections(opts.node_uuid)
     connected_peers = __MODULE__.refresh_peer_data()
     Logger.warn(fn ->
       "Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
