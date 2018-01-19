@@ -9,7 +9,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
 
 
-  def direct(message, socket, transport) do
+  def direct(pid, message, socket, transport) do
 
     command_struct = Poison.decode!(message)
 
@@ -18,7 +18,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG}."
         end)
-        Commands.send("PONG", socket)
+        Commands.send("PONG", pid)
       "PONG" ->
         Logger.warn(fn ->
           "Received PONG // from #{inspect(socket)}}."

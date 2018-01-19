@@ -48,7 +48,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
       "Sending message #{inspect(message)} to #{inspect(socket)}"
     end)
     message = Poison.encode!(message)
-    IEx.pry
+
     :ok = transport.send(socket, message)
     {:reply, :ok, state}
   end
@@ -64,7 +64,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
     Logger.warn(fn ->
       "handle_info // Received message #{inspect(message)} from #{inspect(socket)}"
     end)
-    msg = MessageHandlers.direct(message, socket, transport)
+    msg = MessageHandlers.direct(self(), message, socket, transport)
     {:noreply, state}
   end
 
