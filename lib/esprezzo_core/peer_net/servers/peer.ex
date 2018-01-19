@@ -101,6 +101,6 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   defp schedule_refresh() do
-    Process.send_after(self(), :refresh_node, 1000)
+    Process.send_after(self(), :refresh_node, 3000)
   end
 end
