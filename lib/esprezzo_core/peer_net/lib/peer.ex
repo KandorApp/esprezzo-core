@@ -1,20 +1,40 @@
 defmodule EsprezzoCore.PeerNet.Peer do
   use GenServer, restart: :temporary
+  use EsprezzoCore.PeerNet.Macros
 
   require Logger
   require IEx
-  # Client
 
   def start_link(_, config) do
     GenServer.start_link(__MODULE__, config)
   end
 
+  @doc"""
+  Setup state Map. Possibly change to Struct
+  """
   def init(socket: socket, transport: transport) do
-    {:ok, %{socket: socket, transport: transport}}
+    {:ok, {{a,b,c,d}, port}} = __MODULE__.ip_for_process(socket)
+    state = %{}
+      |> Map.put(:remote_addr, "#{a}.#{b}.#{c}.#{d}")
+      |> Map.put(:remote_port, port)
+      |> Map.put(:socket, socket)
+      |> Map.put(:transport, transport)
+    {:ok, state}
   end
 
+  @doc"""
+  EsprezzoCore.PeerNet.Peer.send_message(pid, message)
+  """
   def send_message(pid, message) do
     GenServer.call(pid, {:send_message, message})
+  end
+
+  @doc"""
+  p = EsprezzoCore.PeerNet.peers |> List.last
+  a = EsprezzoCore.PeerNet.Peer.peer_state(p)
+  """
+  def peer_state(pid) do
+    GenServer.call(pid, :get_state, :infinity)
   end
 
   # Server
@@ -27,6 +47,10 @@ defmodule EsprezzoCore.PeerNet.Peer do
     end)
     :ok = transport.send(socket, message)
     {:reply, :ok, state}
+  end
+
+  def handle_call(:get_state, _from, state) do
+    {:reply, state, state}
   end
 
   @doc"""
@@ -69,4 +93,6 @@ defmodule EsprezzoCore.PeerNet.Peer do
   def handle_info(:timeout, state) do
     {:stop, :normal, state}
   end
+
+ 
 end

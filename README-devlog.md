@@ -4,7 +4,7 @@ Native ProtocolDef test
 Created PeerNet Structure 
 Client
 Server
-StateTracker
+PeerTracker
 
 Setup Connections
 Default P2P Port 30343

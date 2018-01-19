@@ -51,7 +51,8 @@ defmodule EsprezzoCore.Mixfile do
       {:cowboy, "~> 1.0"},
       {:rustler, "~> 0.10.1"},
       {:edeliver, "~> 1.4.4"},
-      {:distillery, "~> 1.5", runtime: false}
+      {:distillery, "~> 1.5", runtime: false},
+      {:secure_random, "~> 0.5"}
     ]
   end
 

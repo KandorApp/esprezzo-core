@@ -1,8 +1,7 @@
 defmodule EsprezzoCore.PeerNet.Client do
   require Logger
   require IEx
-  alias EsprezzoCore.PeerNet.StateTracker
-  alias EsprezzoCore.PeerNet.NetMeta
+  alias EsprezzoCore.PeerNet.PeerTracker
 
   @doc"""
   EsprezzoCore.PeerNet.Client.connect("127.0.0.1", 19876)
@@ -13,16 +12,11 @@ defmodule EsprezzoCore.PeerNet.Client do
           {n, _} = Integer.parse(x)
           n
         end )
-    #opts = [:binary, :inet, active: true, packet: :line]
-    # with {:ok, socket} = :gen_tcp.connect({a, b, c, d}, port, opts) do
-    #   {:ok, pid} = StateTracker.add_peer(socket, :gen_tcp)
-    #   :gen_tcp.controlling_process(socket, pid)
-    #   {:ok, pid}
-    # end
+
     tcp_options = [:binary, {:packet, 4}, active: true, reuseaddr: true]
     case :gen_tcp.connect({a, b, c, d}, port, tcp_options) do
       {:ok, socket} ->  
-        {:ok, pid} = StateTracker.add_peer(socket, :gen_tcp)
+        {:ok, pid} = PeerTracker.add_peer(socket, :gen_tcp)
         :gen_tcp.controlling_process(socket, pid)
         {:ok, pid}
       {:error, reason} ->
@@ -35,12 +29,16 @@ defmodule EsprezzoCore.PeerNet.Client do
   end
 
   def connect_to_bootstrap_nodes do
-    NetMeta.bootstrap_nodes
+    bootstrap_nodes()
       |> Enum.map(fn x ->
         [ip, port] = String.split(x, ":")
         {port, _} = Integer.parse(port)
         __MODULE__.connect(ip, port)
     end)
+  end
+
+  def bootstrap_nodes do
+    ["40.65.113.90:30343","52.169.4.140:30343"]
   end
 
 end

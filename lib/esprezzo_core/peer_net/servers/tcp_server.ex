@@ -1,4 +1,4 @@
-defmodule EsprezzoCore.PeerNet.Server do
+defmodule EsprezzoCore.PeerNet.TCPServer do
   
   require Logger
   require IEx

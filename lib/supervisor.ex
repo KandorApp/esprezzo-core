@@ -14,9 +14,9 @@ defmodule EsprezzoCore.Supervisor do
     children = []
     unless @quiet do
       children = children ++ [ 
-        worker(EsprezzoCore.PeerNet.Server, [[{:name, PeerNetServer},{:port, 30343}]], [id: "PeerNetServer1"]),       
-        worker(EsprezzoCore.PeerNet.StateTracker, [[{:name, PeerStateTracker}]], [id: "PeerStateTracker"]),
-        worker(EsprezzoCore.Command,[CommandWorker])
+        worker(EsprezzoCore.PeerNet.TCPServer, [[{:name, PeerNetTCPServer},{:port, 30343}]], [id: "PeerNetTCPServer"]),       
+        worker(EsprezzoCore.PeerNet.PeerTracker, [[{:name, PeerTracker}]], [id: "PeerTracker"]),
+        worker(EsprezzoCore.PeerNet.PeerManager, [[{:name, PeerManager}]], [id: "PeerManager"])
       ] 
     end
     supervise(children, strategy: :one_for_one)

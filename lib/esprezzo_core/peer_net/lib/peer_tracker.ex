@@ -1,6 +1,9 @@
-defmodule EsprezzoCore.PeerNet.StateTracker do
+defmodule EsprezzoCore.PeerNet.PeerTracker do
+  @moduledoc"""
+  Supervisor who's only job us to acts as a container
+  for a group of peer connection processes
+  """
   use Supervisor
-
   alias EsprezzoCore.PeerNet.Peer
   alias EsprezzoCore.PeerNet
 
@@ -33,4 +36,5 @@ defmodule EsprezzoCore.PeerNet.StateTracker do
   def remove_peer(pid) do
     Supervisor.terminate_child(__MODULE__, pid)
   end
+  
 end

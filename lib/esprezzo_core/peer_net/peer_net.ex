@@ -1,6 +1,6 @@
 defmodule EsprezzoCore.PeerNet do
 
-  alias EsprezzoCore.PeerNet.StateTracker
+  alias EsprezzoCore.PeerNet.PeerTracker
   alias EsprezzoCore.PeerNet.Client
   alias EsprezzoCore.PeerNet.Peer
   
@@ -8,14 +8,14 @@ defmodule EsprezzoCore.PeerNet do
   EsprezzoCore.PeerNet.peers
   """
   def peers do
-    StateTracker.list_peers()
+    PeerTracker.list_peers()
   end
 
   """
   EsprezzoCore.PeerNet.count_peers
   """
   def count_peers do
-    StateTracker.count_peers()
+    PeerTracker.count_peers()
   end
 
   """
@@ -48,6 +48,5 @@ defmodule EsprezzoCore.PeerNet do
         EsprezzoCore.PeerNet.send_message(pid, "PING")
       end)
   end
-
 
 end
