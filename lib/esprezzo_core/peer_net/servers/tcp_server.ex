@@ -1,5 +1,4 @@
 defmodule EsprezzoCore.PeerNet.TCPServer do
-  
   require Logger
   require IEx
   use GenServer
@@ -15,11 +14,11 @@ defmodule EsprezzoCore.PeerNet.TCPServer do
   """
   def init(opts) do
     tcp_opts = [{:port, Keyword.get(opts, :port)}]
-    {:ok, pid} = :ranch.start_listener(:network, 100, :ranch_tcp, tcp_opts, TCPHandler, [])
+    node_uuid = Keyword.get(opts, :node_uuid)
+    {:ok, pid} = :ranch.start_listener(:network, 100, :ranch_tcp, tcp_opts, TCPHandler, [node_uuid])
     Logger.info(fn ->
       "Listening for connections on port #{Keyword.get(opts, :port)}"
     end)
-    #PeerNet.bootstrap_connections()
     {:ok, pid}
   end
 

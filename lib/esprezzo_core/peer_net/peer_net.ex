@@ -21,8 +21,8 @@ defmodule EsprezzoCore.PeerNet do
   """
   EsprezzoCore.PeerNet.bootstrap_connections()
   """
-  def bootstrap_connections(node_uuid) do
-    Client.connect_to_bootstrap_nodes(node_uuid)
+  def bootstrap_connections() do
+    Client.connect_to_bootstrap_nodes()
   end
 
   """

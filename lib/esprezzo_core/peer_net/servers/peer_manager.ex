@@ -6,9 +6,9 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
 
   use GenServer
   require Logger
+  require IEx
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.PeerTracker
-  alias EsprezzoCore.PeerNet.WireProtocol
   @doc"""
   Setup
   """
@@ -25,17 +25,15 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   }
   """
   def init(opts) do
-    node_uuid = WireProtocol.generate_node_uuid()
-    PeerNet.bootstrap_connections(node_uuid)
+    PeerNet.bootstrap_connections()
     connected_peers = __MODULE__.refresh_peer_data()
-    Logger.warn(fn -> 
-      inspect opts
+    Logger.warn(fn ->
       "Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
     end)
     {:ok, %{
       :authorized_peers => [],
       :connected_peers => connected_peers,
-      :node_uuid => node_uuid
+      :node_uuid => opts.node_uuid
       }
     }
   end

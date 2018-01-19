@@ -1,6 +1,8 @@
 defmodule EsprezzoCore.Supervisor do
   use Supervisor
-  
+  require Logger
+  alias EsprezzoCore.PeerNet.WireProtocol
+
   @quiet false
 
   def start_link do
@@ -11,12 +13,17 @@ defmodule EsprezzoCore.Supervisor do
   Initialize Primary Supervisor
   """
   def init([]) do
+    node_uuid = WireProtocol.generate_node_uuid()
+    Logger.warn(fn ->
+      "Starting node with uuid #{node_uuid}"
+    end)
+    
     children = []
     unless @quiet do
       children = children ++ [ 
-        worker(EsprezzoCore.PeerNet.TCPServer, [[{:name, PeerNetTCPServer},{:port, 30343}]], [id: "PeerNetTCPServer"]),       
-        worker(EsprezzoCore.PeerNet.PeerTracker, [[{:name, PeerTracker}]], [id: "PeerTracker"]),
-        worker(EsprezzoCore.PeerNet.PeerManager, [[{:name, PeerManager}]], [id: "PeerManager"])
+        worker(EsprezzoCore.PeerNet.TCPServer, [[{:name, PeerNetTCPServer},{:port, 30343}, {:node_uuid, node_uuid}]], [id: "PeerNetTCPServer"]),       
+        worker(EsprezzoCore.PeerNet.PeerTracker, [%{name: PeerTracker, node_uuid: node_uuid}], [id: "PeerTracker"]),
+        worker(EsprezzoCore.PeerNet.PeerManager, [%{name: PeerManager, node_uuid: node_uuid}], [id: "PeerManager"])
       ] 
     end
     supervise(children, strategy: :one_for_one)

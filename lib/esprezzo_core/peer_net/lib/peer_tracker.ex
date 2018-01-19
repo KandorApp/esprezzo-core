@@ -6,7 +6,7 @@ defmodule EsprezzoCore.PeerNet.PeerTracker do
   use Supervisor
   alias EsprezzoCore.PeerNet.Peer
   alias EsprezzoCore.PeerNet
-
+  require IEx
   def start_link(config) do
     Supervisor.start_link(__MODULE__, config, name: __MODULE__)
   end
@@ -30,6 +30,7 @@ defmodule EsprezzoCore.PeerNet.PeerTracker do
   end
 
   def add_peer(socket, transport, node_uuid) do
+    IEx.pry
     Supervisor.start_child(__MODULE__, [[socket: socket, transport: transport, node_uuid: node_uuid]])
   end
 
