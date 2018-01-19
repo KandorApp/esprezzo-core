@@ -12,6 +12,10 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
     Peer.send_message(pid, Ping.build)
   end
   
+  def build("PING") do
+    Ping.build
+  end
+  
   @doc"""
   Use public API to emit genserver 
   callback msg for pid

@@ -1,7 +1,7 @@
 defmodule EsprezzoCore.PeerNet.Peer do
   use GenServer, restart: :temporary
   use EsprezzoCore.PeerNet.Macros
-
+  alias EsprezzoCore.PeerNet.WireProtocol.Commands
   require Logger
   require IEx
 
@@ -95,15 +95,18 @@ defmodule EsprezzoCore.PeerNet.Peer do
     {:stop, :normal, state}
   end
   
-  def handle_info(:refresh_node, state) do
+  def handle_info(:refresh_node, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
     Logger.warn(fn ->
-      "refreshing_node... #{state.remote_addr}"
+      "refreshing_node... #{remote_addr}"
     end)
-    schedule_refresh() # Reschedule
+    command_message = Commands.build("PING")
+    network_message = Poison.encode!(command_message)
+    :ok = transport.send(socket, network_message)
+    schedule_refresh()
     {:noreply, state}
   end
 
   defp schedule_refresh() do
-    Process.send_after(self(), :refresh_node, 3000)
+    Process.send_after(self(), :refresh_node, 10000)
   end
 end
