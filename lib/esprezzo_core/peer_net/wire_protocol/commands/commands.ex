@@ -8,8 +8,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
     Peer.send_message(pid, Ping.build)
   end
 
-  def send("PONG", pid, data) do
-    Peer.send_message(pid, "PONG")
+  def send("PONG", pid) do
+    Peer.send_message(pid, Pong.build)
   end
 
   def send("hello", pid, data) do

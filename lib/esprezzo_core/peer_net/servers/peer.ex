@@ -61,10 +61,9 @@ defmodule EsprezzoCore.PeerNet.Peer do
   """
   def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
     Logger.warn(fn ->
-      "Received message #{inspect(message)} from #{inspect(socket)}"
+      "handle_info // Received message #{inspect(message)} from #{inspect(socket)}"
     end)
-    msg = MessageHandlers.direct(message)
-    
+    msg = MessageHandlers.direct(message, socket, transport)
     {:noreply, state}
   end
 
