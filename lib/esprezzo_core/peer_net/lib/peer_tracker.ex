@@ -1,6 +1,6 @@
 defmodule EsprezzoCore.PeerNet.PeerTracker do
   @moduledoc"""
-  Supervisor who's only job us to acts as a container
+  Supervisor whos only job is to acts as a container
   for a group of peer connection processes
   """
   use Supervisor

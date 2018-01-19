@@ -3,7 +3,7 @@ defmodule EsprezzoCore.PeerNet do
   alias EsprezzoCore.PeerNet.PeerTracker
   alias EsprezzoCore.PeerNet.Client
   alias EsprezzoCore.PeerNet.Peer
-  
+  alias EsprezzoCore.PeerNet.WireProtocol.Commands
   """
   EsprezzoCore.PeerNet.peers
   """
@@ -33,19 +33,12 @@ defmodule EsprezzoCore.PeerNet do
   end
  
   """
-  EsprezzoCore.PeerNet.send_message(pid, "PING")
-  """
-  def send_message(peer, message) do
-    Peer.send_message(peer, message)
-  end
-
-  """
   EsprezzoCore.PeerNet.ping_all()
   """
   def ping_all do
     __MODULE__.peers()
       |> Enum.each(fn pid -> 
-        EsprezzoCore.PeerNet.send_message(pid, "PING")
+        Commands.send("PING", pid)
       end)
   end
 

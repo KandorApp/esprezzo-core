@@ -5,6 +5,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
   require Logger
   require IEx
 
+  alias EsprezzoCore.PeerNet.WireProtocol.MessageHandlers
+
   def start_link(_, config) do
     GenServer.start_link(__MODULE__, config)
   end
@@ -45,6 +47,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
     Logger.warn(fn ->
       "Sending message #{inspect(message)} to #{inspect(socket)}"
     end)
+    message = Poison.encode!(message)
     :ok = transport.send(socket, message)
     {:reply, :ok, state}
   end
@@ -57,24 +60,11 @@ defmodule EsprezzoCore.PeerNet.Peer do
   RECV network message from remote connection
   """
   def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
-    # Logger.warn(fn ->
-    #   "Received message #{inspect(message)} from #{inspect(socket)} // Control goes here"
-    # end)
-    case message do
-      "PING" ->
-        Logger.warn(fn ->
-          "Received PING from #{inspect(socket)} // Sending PONG}."
-        end)
-        transport.send(socket, "PONG")
-      "PONG" ->
-        Logger.warn(fn ->
-          "Received PONG // from #{inspect(socket)}}."
-        end)
-      message ->
-        Logger.warn(fn ->
-          "Received message #{inspect(message)} from #{inspect(socket)}."
-        end)
-    end
+    Logger.warn(fn ->
+      "Received message #{inspect(message)} from #{inspect(socket)}"
+    end)
+    msg = MessageHandlers.direct(message)
+    
     {:noreply, state}
   end
 

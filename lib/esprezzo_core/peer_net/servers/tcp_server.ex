@@ -12,7 +12,6 @@ defmodule EsprezzoCore.PeerNet.TCPServer do
 
   @doc"""
   Setup p2p tcp listener
-  Takes list of 2-tuples for input params
   """
   def init(opts) do
     tcp_opts = [{:port, Keyword.get(opts, :port)}]
