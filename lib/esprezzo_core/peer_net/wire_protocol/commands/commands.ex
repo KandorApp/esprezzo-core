@@ -2,7 +2,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
   require IEx
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.Peer
-  alias EsprezzoCore.WireProtocol.Commands.{Ping, Pong}
+  alias EsprezzoCore.WireProtocol.Commands.{Ping, Pong, Hello, Disconnect, Status}
   
   @doc"""
   Use public API to emit genserver 
@@ -28,12 +28,16 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
     Pong.build
   end
 
-  def send("hello", pid, data) do
-    Peer.send_message(pid, "HELLO")
+  def build("HELLO") do
+    Hello.build
   end
 
-  def send("STATUS", pid, data) do
-    Peer.send_message(pid, "HELLO")
+  def build("DISCONNECT") do
+    Disconnect.build
+  end
+ 
+  def build("STATUS") do
+    Status.build
   end
 
 end

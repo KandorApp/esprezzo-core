@@ -21,6 +21,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
       |> Map.put(:remote_port, port)
       |> Map.put(:socket, socket)
       |> Map.put(:transport, transport)
+
+    schedule_refresh()
     {:ok, state}
   end
 
@@ -60,14 +62,14 @@ defmodule EsprezzoCore.PeerNet.Peer do
   @doc"""
   RECV network message from remote connection
   """
-  def handle_info({:tcp, _, message}, %{socket: socket, transport: transport} = state) do
-    Logger.warn(fn ->
-      "handle_info // Received message #{inspect(message)} from #{inspect(socket)}"
-    end)
-    case MessageHandlers.process(message, socket, transport) do
+  def handle_info({:tcp, _, message}, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
+    # Logger.warn(fn ->
+    #   "handle_info // Received message #{inspect(message)} from #{inspect(socket)}"
+    # end)
+    case MessageHandlers.process(message, socket, transport, remote_addr) do
       :ok ->
         {:noreply, state}
-      command_message ->
+      {:ok, command_message} ->
         network_message = Poison.encode!(command_message)
         :ok = transport.send(socket, network_message)
         {:noreply, state}
@@ -89,6 +91,16 @@ defmodule EsprezzoCore.PeerNet.Peer do
   def handle_info(:timeout, state) do
     {:stop, :normal, state}
   end
+  
+  def handle_info(:refresh_node, state) do
+    Logger.warn(fn ->
+      "refreshing_node... #{state.remote_addr}"
+    end)
+    schedule_refresh() # Reschedule
+    {:noreply, state}
+  end
 
- 
+  defp schedule_refresh() do
+    Process.send_after(self(), :refresh_node, 1000)
+  end
 end

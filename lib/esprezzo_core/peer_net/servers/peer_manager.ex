@@ -19,7 +19,8 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   @doc"""
   Initialize PeerManager Process
   %{
-    :peers = []
+    :connected_peers => [],
+    :authorized_peers => []
   }
   """
   def init(opts) do
