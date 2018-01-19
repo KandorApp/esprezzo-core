@@ -7,7 +7,9 @@ defmodule EsprezzoCore.PeerNet.TCPHandler do
     {:ok, pid}
   end
          
-  def init(ref, socket, transport, opts = [node_uuid: node_uuid]) do
+  def init(ref, socket, transport, opts) do
+    IEx.pry
+    node_uuid = "xx"
     :ok = :ranch.accept_ack(ref)
     tcp_options = [:binary, {:packet, 4}, active: true, reuseaddr: true]
     :ok = transport.setopts(socket, tcp_options)
