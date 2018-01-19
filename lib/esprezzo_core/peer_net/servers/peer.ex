@@ -14,16 +14,18 @@ defmodule EsprezzoCore.PeerNet.Peer do
   @doc"""
   Setup state Map. Possibly change to Struct
   """
-  def init(socket: socket, transport: transport, node_id: node_id) do
+  def init(socket: socket, transport: transport, node_uuid: node_uuid) do
+    
     {:ok, {{a,b,c,d}, port}} = __MODULE__.ip_for_process(socket)
+    
     state = %{}
       |> Map.put(:remote_addr, "#{a}.#{b}.#{c}.#{d}")
       |> Map.put(:remote_port, port)
       |> Map.put(:socket, socket)
       |> Map.put(:transport, transport)
-      |> Map.put(:node_id, node_id)
-
-    schedule_refresh()
+      |> Map.put(:node_uuid, node_uuid)
+    
+      schedule_refresh()
     {:ok, state}
   end
 
@@ -95,7 +97,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   
   def handle_info(:refresh_node, state) do
     Logger.warn(fn ->
-      "refreshing_node... #{state.remote_addr} // #{state.node_uuid}"
+      "refreshing_node... #{state.remote_addr}"
     end)
     schedule_refresh() # Reschedule
     {:noreply, state}
