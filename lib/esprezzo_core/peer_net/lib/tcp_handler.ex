@@ -7,9 +7,11 @@ defmodule EsprezzoCore.PeerNet.TCPHandler do
     {:ok, pid}
   end
          
+  @doc"""
+  Init the TCP Protocol handler
+  """
   def init(ref, socket, transport, opts) do
-    IEx.pry
-    node_uuid = "xx"
+    node_uuid =  Keyword.get(opts, :node_uuid)
     :ok = :ranch.accept_ack(ref)
     tcp_options = [:binary, {:packet, 4}, active: true, reuseaddr: true]
     :ok = transport.setopts(socket, tcp_options)

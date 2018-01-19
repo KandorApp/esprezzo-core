@@ -7,3 +7,6 @@ How do NodeIDs work?
 New Each time Node Starts
 Old NodeIDs expire after ... 1 hr?
 3 bad pings // removed from active
+set "my ip" and avoid it for connections and pings
+-OR-
+compare node_uuids with connection return since "my_ip" will not be avail on the local iface
