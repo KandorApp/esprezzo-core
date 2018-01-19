@@ -1,0 +1,8 @@
+# WireProtocol Overview
+
+## P2P/NodeIDs
+Randomly generated UUID
+Should we add enode ids?
+How do NodeIDs work?
+New Each time Node Starts
+Old NodeIDs expire after ... 1 hr?
