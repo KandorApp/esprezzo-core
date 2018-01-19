@@ -18,3 +18,7 @@ authorized_peers should be checked before each actions besides CONNECT and HELLO
 Get timestamps right so connected_peers that are not authorized_peers after 1 minute are disconnected
 
 make sure hanging conditions are safe
+
+DIG up Credo
+
+get elixir 1.6 with code formatting... ugh
