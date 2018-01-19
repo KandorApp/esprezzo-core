@@ -2,7 +2,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
   require IEx
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.Peer
-  alias EsprezzoCore.WireProtocol.Commands.Ping
+  alias EsprezzoCore.WireProtocol.Commands.{Ping, Pong}
   
   def send("PING", pid) do
     Peer.send_message(pid, Ping.build)
