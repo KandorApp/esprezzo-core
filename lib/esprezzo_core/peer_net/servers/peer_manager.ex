@@ -25,7 +25,8 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   }
   """
   def init(opts) do
-    PeerNet.bootstrap_connections()
+    node_uuid = WireProtocol.generate_node_uuid()
+    PeerNet.bootstrap_connections(node_uuid)
     connected_peers = __MODULE__.refresh_peer_data()
     Logger.warn(fn -> 
       inspect opts
@@ -34,7 +35,7 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     {:ok, %{
       :authorized_peers => [],
       :connected_peers => connected_peers,
-      :node_uuid => WireProtocol.generate_node_uuid
+      :node_uuid => node_uuid
       }
     }
   end

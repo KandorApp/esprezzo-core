@@ -29,8 +29,8 @@ defmodule EsprezzoCore.PeerNet.PeerTracker do
     |> Enum.map(fn {_, pid, _, _} -> pid end)
   end
 
-  def add_peer(socket, transport) do
-    Supervisor.start_child(__MODULE__, [[socket: socket, transport: transport]])
+  def add_peer(socket, transport, node_uuid) do
+    Supervisor.start_child(__MODULE__, [[socket: socket, transport: transport, node_uuid: node_uuid]])
   end
 
   def remove_peer(pid) do
