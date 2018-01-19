@@ -1,9 +1,8 @@
 defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   @moduledoc"""
-  Parser/Router for incoming commands
-  This only returns commnds to the calling
-  Peer process and it returns the messages
-  directly.
+  Parser/Dispatcher for incoming commands.
+  Returns command structs to the calling
+  Peer process.
   """
   require Logger
   require IEx
