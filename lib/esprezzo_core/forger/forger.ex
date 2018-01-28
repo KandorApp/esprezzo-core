@@ -11,7 +11,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
   alias EsprezzoCore.Forger.Templates
   alias EsprezzoCore.Blockchain.Persistence
 
-  @target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000
+  @target_diff 100000000000000000000000000000000000000000000000000000000000000000000000000
                
   @doc"""
   Setup
@@ -27,7 +27,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
   Setup state Map
   """
   def init(state) do
-    state = Map.put(state, :pause, true)
+    state = Map.put(state, :pause, false)
     schedule_forge(state)
     {:ok, state}
   end
