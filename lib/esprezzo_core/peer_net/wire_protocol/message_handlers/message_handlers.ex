@@ -12,9 +12,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
 
   def process(message, socket, transport, remote_addr) do
 
-    command_struct = Poison.decode!(message)
+    command_struct = Poison.decode!(message, keys: :atoms)
 
-    case command_struct["command"] do
+    case command_struct.command do
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG to #{remote_addr}"
@@ -39,7 +39,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
         end)
-        block = command_struct["blockData"]
+        block = command_struct.blockData
         IEx.pry
         EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         :ok
