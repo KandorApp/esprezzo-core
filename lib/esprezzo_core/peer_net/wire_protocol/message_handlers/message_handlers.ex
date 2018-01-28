@@ -39,8 +39,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
         end)
+        block = command_struct["blockData"]
         IEx.pry
-        # EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+        EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         :ok
     
       message ->

@@ -11,7 +11,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
   alias EsprezzoCore.Forger.Templates
   alias EsprezzoCore.Blockchain.Persistence
 
-  @target_diff 10000000000000000000000000000000000000000000000000000000000000000000000000
+  @target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000
                
   @doc"""
   Setup

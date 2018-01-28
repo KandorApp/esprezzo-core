@@ -14,8 +14,10 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
     Persistence.clear_blocks()
     genesis_block = Forger.forge_genesis_block(genesis_block_template)
     case Persistence.persist_block(genesis_block) do
-      {:ok, _} -> :ok
-      {:error, _} -> :error
+      {:ok, block} -> 
+        EsprezzoCore.Blockchain.CoreMeta.push_block(block) 
+        {:ok, block}
+      {:error, error} -> {:error, error}
     end
   end
 
