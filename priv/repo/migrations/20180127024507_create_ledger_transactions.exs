@@ -1,7 +1,6 @@
 defmodule EsprezzoCore.Repo.Migrations.CreateLedgerTransactions do
   use Ecto.Migration
 
-  
   def change do
     create table(:ledger_transactions) do
       add :version, :map

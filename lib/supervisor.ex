@@ -3,7 +3,7 @@ defmodule EsprezzoCore.Supervisor do
   require Logger
   alias EsprezzoCore.PeerNet.WireProtocol
 
-  @quiet true
+  @quiet false
 
   def start_link do
     Supervisor.start_link(__MODULE__, [], name: :p2p_server_supervisor)
