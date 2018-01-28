@@ -8,7 +8,7 @@ defmodule EsprezzoCore.PeerNet do
   EsprezzoCore.PeerNet.peers
   """
   def peers do
-    PeerTracker.list_peers()
+    PeerTracker.list_peer_pids()
   end
 
   """

@@ -8,8 +8,10 @@ defmodule EsprezzoCore.Blockchain.Forger do
   alias EsprezzoCore.Blockchain.Settlement.CoreChain
   alias EsprezzoCore.BlockChain.Settlement.Structs.{BlockHeader, Block}
   alias EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis
+  alias EsprezzoCore.Forger.Templates
+  alias EsprezzoCore.Blockchain.Persistence
 
-  @target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000
+  @target_diff 10000000000000000000000000000000000000000000000000000000000000000000000000
                
   @doc"""
   Setup
@@ -25,15 +27,36 @@ defmodule EsprezzoCore.Blockchain.Forger do
   Setup state Map
   """
   def init(state) do
-    #schedule_forge(header)
-    {:ok, %{}}
+    state = Map.put(state, :pause, false)
+    schedule_forge(state)
+    {:ok, state}
   end
+
+
+  @doc """
+  EsprezzoCore.Blockchain.Forger.forge()
+  """
+  @spec forge() :: :ok | :error
+  def forge() do
+    block_candidate = forge_block_candidate(Templates.block_template())
+    case Persistence.persist_block(block_candidate) do
+      {:ok, block} -> 
+        Logger.warn "Storing Block Candidate for height: #{Blockchain.current_height}"
+        # update memchain
+        EsprezzoCore.Blockchain.CoreMeta.push_block(block)        
+        {:ok, block}
+      {:error, changeset} ->
+        Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
+        {:error, changeset}
+    end
+  end
+
 
   @doc """
     EsprezzoCore.Blockchain.Forger.forge_genesis_block()
   """
   def forge_genesis_block(block_data) do 
-   
+
     {header_hash, nonce} = forge_block_hash(block_data.header, 0)
    
     header_data = block_data.header
@@ -52,6 +75,31 @@ defmodule EsprezzoCore.Blockchain.Forger do
         false
     end
   end
+
+  @doc """
+    EsprezzoCore.Blockchain.Forger.forge_block(block_data)
+  """
+  def forge_block_candidate(block_data) do 
+
+    {header_hash, nonce} = forge_block_hash(block_data.header, 0)
+   
+    header_data = block_data.header
+      |> Map.put(:nonce, nonce)
+
+    finished_block = block_data
+      |> Map.put(:header_hash, header_hash)
+      |> Map.put(:header, header_data)
+
+    case Blockchain.block_is_valid?(finished_block) do
+      true ->
+        finished_block
+      _ ->
+        Logger.error "Forging Genesis Block Failed"
+        IEx.pry
+        false
+    end
+  end
+
 
   @doc """
     data = EsprezzoCore.Blockchain.Settlement.CoreChain.genesis_block  
@@ -76,11 +124,16 @@ defmodule EsprezzoCore.Blockchain.Forger do
   end
 
   def handle_info(:forge_block, state) do
-    Logger.warn(fn ->
-      "Forging New Block"
-    end)
-    #forge_block(header)
-    #schedule_forge()
+    case state.pause do
+      true ->
+        Logger.warn "Forging Paused..."
+      false ->
+        Logger.warn(fn ->
+          "Forging New Block"
+        end)
+        EsprezzoCore.Blockchain.Forger.forge()
+    end
+    schedule_forge(state)
     {:noreply, state}
   end
 
@@ -120,8 +173,25 @@ defmodule EsprezzoCore.Blockchain.Forger do
       |> String.downcase()
   end
 
-  defp schedule_forge(header) do
-    #Process.send_after(self(), {:forge_block, header}, 1000)
+  defp schedule_forge(state) do
+    Process.send_after(self(), :forge_block, 10000)
   end
  
+  @doc """
+  EsprezzoCore.Blockchain.Forger.toggle()
+  """
+  def toggle() do
+    GenServer.call(__MODULE__, :toggle, :infinity)
+  end
+
+  def handle_call(:toggle, _from, state) do
+    state = case state.pause do
+      false ->
+        Map.put(state, :pause, true)
+      true ->
+        Map.put(state, :pause, false)  
+    end
+    {:reply, state, state}
+  end
+  
 end

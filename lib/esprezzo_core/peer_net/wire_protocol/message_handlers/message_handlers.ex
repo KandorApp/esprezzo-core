@@ -35,6 +35,14 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           false ->
             {:error, Commands.build("DISCONNECT")}
         end
+      "NEW_BLOCK" ->
+        Logger.warn(fn ->
+          "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
+        end)
+        IEx.pry
+        # EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+        :ok
+    
       message ->
         Logger.warn(fn ->
           "Received unknown message #{inspect(message)} from #{inspect(socket)}."

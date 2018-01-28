@@ -24,7 +24,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
       |> Map.put(:socket, socket)
       |> Map.put(:transport, transport)
       |> Map.put(:node_uuid, node_uuid)
-    
+      |> Map.put(:pid, self())
+     
       schedule_hello()
     {:ok, state}
   end
@@ -88,7 +89,6 @@ defmodule EsprezzoCore.PeerNet.Peer do
     Logger.warn(fn ->
       "TCP Error: #{inspect(reason)}. socket=#{inspect(socket)}"
     end)
-
     {:stop, :normal, state}
   end
 
@@ -124,11 +124,33 @@ defmodule EsprezzoCore.PeerNet.Peer do
     {:noreply, state}
   end
 
+  @doc """
+    EsprezzoCore.PeerNet.Peer.push_block(block)
+  """
+  def push_block(pid, block) do
+    block = sanitize(block)
+    Process.send_after(pid, {:push_block, block}, 300)
+  end
+  def handle_info({:push_block, block}, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
+    Logger.warn(fn ->
+      "PUSHING NEW BLOCK to #{remote_addr}"
+    end)
+    command_message = Commands.build("NEW_BLOCK", block)
+    network_message = Poison.encode!(command_message)
+    Logger.info network_message
+    :ok = transport.send(socket, network_message)
+    {:noreply, state}
+  end
+
   defp schedule_refresh() do
     Process.send_after(self(), :refresh_node, 33333)
   end
 
   defp schedule_hello() do
     Process.send_after(self(), :send_hello, 1000)
+  end
+
+  defp sanitize(map) do
+    Map.drop(map, [:__meta__, :__struct__])
   end
 end

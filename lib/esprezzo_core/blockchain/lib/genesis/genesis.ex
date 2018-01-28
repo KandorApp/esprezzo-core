@@ -25,7 +25,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
   @spec genesis_block_template() :: Block.t
   def genesis_block_template do
     gen_timestamp = :os.system_time(:seconds)
-    b = %Block{
+    %Block{
       header_hash: "0x",
       timestamp: gen_timestamp,
       header: %BlockHeader{
@@ -39,13 +39,10 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
     } 
     |> Map.put(:txns, genesis_txns())
     |> Transactions.write_merkle_root_to_block_header()
-
-    IEx.pry
-    b
   end
 
   @doc """
-  t = EsprezzoCore.Blockchain.Settlement.CoreChain.genesis_txns |> List.first
+    t = EsprezzoCore.Blockchain.Settlement.CoreChain.genesis_txns |> List.first
   """
   @spec genesis_txns :: Transaction.t
   def genesis_txns do

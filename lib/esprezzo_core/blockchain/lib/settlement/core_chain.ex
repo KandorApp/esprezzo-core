@@ -18,51 +18,15 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain do
   #   end
   # end
 
-  @doc"""
-    Create template to forge new block
-  """
-  def block_template do
-    %Block{
-      txns: [],
-      header: %BlockHeader{
-        version: 0,
-        previous_hash: "0x",
-        txns_merkle_root: "0x",
-        timestamp: :os.system_time(:seconds),
-        nonce: 0
-      }
-    } 
-  end
-
-  def txns_template do
-    # get best block
-    # find coinbase address
-    [
-      %Transaction{ 
-        version: 0,
-        timestamp: :os.system_time(:seconds),
-        # Coinbase txn
-        vin: [
-          %{
-            txid: "0x00",
-            vout: "0x00",
-            script_sig: "0x"
-          },
-        ],
-        vout: [
-          %{
-            val: "100000000",
-            locking_contract: "OP_DUP OP_HASH160 1Fv1regg69W4AXhfbnFKR418qT8SXhhxRG OP_EQUALVERIFY OP_CHECKSIG" 
-          }
-        ]
-      }
-    ]
-  end
-
 
   @spec best_block() :: Block
   def best_block() do
     Persistence.best_block()
+  end
+
+  @spec current_height() :: Integer.t
+  def current_height() do
+    Persistence.current_height()
   end
 
   @spec validate_block(Block) :: Boolean

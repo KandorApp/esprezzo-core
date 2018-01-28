@@ -18,7 +18,7 @@ defmodule EsprezzoCore.Blockchain do
   @doc """
     EsprezzoCore.Blockchain.best_block()
   """
-  def best_block do 
+  def best_block() do 
     CoreChain.best_block()
   end
 
@@ -26,5 +26,8 @@ defmodule EsprezzoCore.Blockchain do
     BlockValidator.is_valid?(block)
   end
 
+  def current_height() do 
+    CoreChain.current_height()
+  end
   
 end

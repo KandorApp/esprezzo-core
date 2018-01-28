@@ -24,10 +24,21 @@ defmodule EsprezzoCore.PeerNet.PeerTracker do
     Supervisor.count_children(__MODULE__).workers
   end
 
-  def list_peers do
+  @doc """
+    EsprezzoCore.PeerNet.PeerTracker.list_peer_pids
+  """
+  def list_peer_pids do
     __MODULE__
     |> Supervisor.which_children()
     |> Enum.map(fn {_, pid, _, _} -> pid end)
+  end
+
+  @doc """
+    EsprezzoCore.PeerNet.PeerTracker.list_peers
+  """
+  def list_peers do
+    __MODULE__
+    |> Supervisor.which_children()
   end
 
   def add_peer(socket, transport, node_uuid) do

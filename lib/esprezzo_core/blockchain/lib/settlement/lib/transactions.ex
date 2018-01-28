@@ -29,7 +29,6 @@ defmodule EsprezzoCore.Blockchain.Settlment.Transactions do
     |> Hash.sha256()
     |> Hash.sha256()
     |> String.downcase()
-
     Map.put(block, :header, Map.put(block.header, :txns_merkle_root, root))
   end
  

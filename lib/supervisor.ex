@@ -21,6 +21,7 @@ defmodule EsprezzoCore.Supervisor do
     children = []
     unless @quiet do
       children = children ++ [ 
+        worker(EsprezzoCore.Blockchain.CoreMeta, [%{name: CoreMeta}], [id: "CoreMeta"]),
         worker(EsprezzoCore.PeerNet.TCPServer, [[{:name, PeerNetTCPServer},{:port, 30343}, {:node_uuid, node_uuid}]], [id: "PeerNetTCPServer"]),       
         worker(EsprezzoCore.PeerNet.PeerTracker, [%{name: PeerTracker, node_uuid: node_uuid}], [id: "PeerTracker"]),
         worker(EsprezzoCore.PeerNet.PeerManager, [%{name: PeerManager, node_uuid: node_uuid}], [id: "PeerManager"]),

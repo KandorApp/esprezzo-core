@@ -34,30 +34,3 @@ defmodule Header do
     field :difficulty_target, :integer
   end
 end
- 
-# defmodule Transaction do
-#   use Ecto.Schema
-#   embedded_schema do
-#     field :version, :integer
-#     field :txid, :string
-#     field :vin, {:array, :map}
-#     field :vout, {:array, :map}
-#   end
-# end
-
-defmodule Output do
-  use Ecto.Schema
-  embedded_schema do
-    field :val, :string
-    field :script_pub_key, :string
-  end
-end
-
-defmodule Input do
-  use Ecto.Schema
-  embedded_schema do
-    field :txid, :string
-    field :vout, :string
-    field :script_sig, :string
-  end
-end

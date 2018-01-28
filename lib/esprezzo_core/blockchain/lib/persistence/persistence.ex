@@ -23,7 +23,8 @@ defmodule EsprezzoCore.Blockchain.Persistence do
       txn = Map.from_struct(t) 
       txn = Map.put(txn, :block_hash, block.header_hash)
       case persist_txn(txn) do
-        {:ok, txn} -> txn
+        {:ok, txn} -> 
+          sanitize(txn)
         {:error, changeset} ->
           Logger.error "Could not persist txn: #{txn.txid}"
       end
@@ -31,16 +32,16 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     block_data = Map.from_struct(Map.delete(block, :txns))
     block_data = Map.put(block_data, :header, Map.from_struct(block_data.header))
     case _persist_block(block_data) do
-      {:ok, block} -> 
-        block
-      {:error, _} ->
-        IEx.pry
-        :error
+      {:ok, block} ->
+        block = Map.put(block, :txns, txn_data)
+        {:ok, block}
+      {:error, changeset} ->
+        Logger.error "Persisting Block Failed"
+        {:error, changeset}
     end
   end
 
   def _persist_block(block_map) do
-    IEx.pry
     cs = Block.changeset(%Block{}, block_map)
     Repo.insert(cs)
   end
@@ -52,5 +53,21 @@ defmodule EsprezzoCore.Blockchain.Persistence do
 
   def best_block() do
     Block.last
+  end
+
+  def load_chain() do
+    Block.all()
+  end
+
+  def load_transactions() do
+    Transaction.all()
+  end
+
+  def current_height() do
+    Block.count()
+  end
+
+  defp sanitize(map) do
+    Map.drop(map, [:__meta__, :__struct__])
   end
 end

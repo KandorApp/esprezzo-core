@@ -12,7 +12,7 @@ defmodule EsprezzoCore.Blockchain.Persistence.QueryMacros do
         import Ecto.Query
   
         def all() do
-          Repo.all(__MODULE__)
+          Repo.all(from x in __MODULE__, order_by: [asc: x.timestamp])
         end
   
         def last() do

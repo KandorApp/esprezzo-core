@@ -1,5 +1,5 @@
 defmodule EsprezzoCore.PeerNet.PeerManager do
-  @moduledoc"""
+  @moduledoc """
   Genserver container that aggregates and exposes 
   data from all peer connections.
   """
@@ -9,14 +9,14 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   require IEx
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.PeerTracker
-  @doc"""
+  @doc """
   Setup
   """
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  @doc"""
+  @doc """
   Initialize PeerManager Process
   %{
     :connected_peers => [],
@@ -38,7 +38,7 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     }
   end
 
-  @doc"""
+  @doc """
   Convenient way to get a List of all peer nodes
 
   Example: 
@@ -55,21 +55,9 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   def get_state do
     GenServer.call(__MODULE__, :get_state, :infinity)
   end
+    # various process messages
 
-  @doc"""
-  Collect all data from all peers to
-  local state. Used on init.
-  """
-  def refresh_peer_data do
-    PeerTracker.list_peers()
-      |> Enum.map(fn pid -> 
-        EsprezzoCore.PeerNet.Peer.peer_state(pid)
-      end)
-  end
-
-  # various process messages
-
-  @doc"""
+  @doc """
   Return state. Not used directly. 
   Used through module __MODULE__.get_state wrapper.
   
@@ -81,5 +69,34 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
   end
+
+  @doc """
+    iex> EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
+  """
+  def notify_peers_with_new_block(block) do
+    GenServer.call(__MODULE__, {:notify_peers_with_new_block, block}, :infinity)
+  end
+  def handle_call({:notify_peers_with_new_block, block}, _from, state) do
+    state.connected_peers
+    |> Enum.each(fn p -> 
+      Logger.warn "Notifying Peer #{p.remote_addr} // #{p.node_uuid} with new block #{block.header_hash}"
+      EsprezzoCore.PeerNet.Peer.push_block(p.pid, block)
+    end)
+    {:reply, state, state}
+  end
+
+
+  @doc """
+  Collect all data from all peers to
+  local state. Used on init.
+  """
+  def refresh_peer_data do
+    PeerTracker.list_peer_pids()
+      |> Enum.map(fn pid -> 
+        EsprezzoCore.PeerNet.Peer.peer_state(pid)
+      end)
+  end
+
+
 
 end
