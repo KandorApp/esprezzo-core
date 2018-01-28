@@ -27,7 +27,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
   Setup state Map
   """
   def init(state) do
-    state = Map.put(state, :pause, false)
+    state = Map.put(state, :pause, true)
     schedule_forge(state)
     {:ok, state}
   end
