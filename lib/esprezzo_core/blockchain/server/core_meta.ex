@@ -105,6 +105,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   end
   def handle_call({:push_block, block}, _from, state) do
     
+    IEx.pry
     block_index = state.block_index ++ [block.header_hash]
   
     blocks = Map.put(state.blocks, block.header_hash, block)
