@@ -23,7 +23,8 @@ defmodule EsprezzoCore.Supervisor do
       children = children ++ [ 
         worker(EsprezzoCore.PeerNet.TCPServer, [[{:name, PeerNetTCPServer},{:port, 30343}, {:node_uuid, node_uuid}]], [id: "PeerNetTCPServer"]),       
         worker(EsprezzoCore.PeerNet.PeerTracker, [%{name: PeerTracker, node_uuid: node_uuid}], [id: "PeerTracker"]),
-        worker(EsprezzoCore.PeerNet.PeerManager, [%{name: PeerManager, node_uuid: node_uuid}], [id: "PeerManager"])
+        worker(EsprezzoCore.PeerNet.PeerManager, [%{name: PeerManager, node_uuid: node_uuid}], [id: "PeerManager"]),
+        worker(EsprezzoCore.Blockchain.Forger, [%{name: Forger}], [id: "ForgeManager"])
       ] 
     end
     supervise(children, strategy: :one_for_one)

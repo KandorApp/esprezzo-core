@@ -52,7 +52,9 @@ defmodule EsprezzoCore.Mixfile do
       {:rustler, "~> 0.10.1"},
       {:edeliver, "~> 1.4.4"},
       {:distillery, "~> 1.5", runtime: false},
-      {:secure_random, "~> 0.5"}
+      {:secure_random, "~> 0.5"},
+      {:mnemonic, "~> 0.2.0"},
+      {:apex, "~>1.2.0"}
     ]
   end
 

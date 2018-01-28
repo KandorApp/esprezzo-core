@@ -1,4 +1,4 @@
-defmodule Hash do
+defmodule EsprezzoCore.Crypto.Hash do
   
   def md5(input) do
     :crypto.hash(:md5, input) |> Base.encode16
@@ -18,6 +18,10 @@ defmodule Hash do
 
   def sha512(input) do
     :crypto.hash(:sha512, input) |> Base.encode16
+  end
+
+  def ripemd160(input) do
+    :crypto.hash(:ripemd160, input) |> Base.encode16
   end
 
 end

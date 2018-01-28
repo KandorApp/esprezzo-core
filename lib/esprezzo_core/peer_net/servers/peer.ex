@@ -25,7 +25,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
       |> Map.put(:transport, transport)
       |> Map.put(:node_uuid, node_uuid)
     
-      schedule_refresh()
+      schedule_hello()
     {:ok, state}
   end
 
@@ -114,7 +114,21 @@ defmodule EsprezzoCore.PeerNet.Peer do
     {:noreply, state}
   end
 
+  def handle_info(:send_hello, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
+    Logger.warn(fn ->
+      "sending_HELLO to #{remote_addr}"
+    end)
+    command_message = Commands.build("HELLO")
+    network_message = Poison.encode!(command_message)
+    :ok = transport.send(socket, network_message)
+    {:noreply, state}
+  end
+
   defp schedule_refresh() do
     Process.send_after(self(), :refresh_node, 33333)
+  end
+
+  defp schedule_hello() do
+    Process.send_after(self(), :send_hello, 1000)
   end
 end
