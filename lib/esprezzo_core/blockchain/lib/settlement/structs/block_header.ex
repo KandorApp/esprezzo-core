@@ -4,7 +4,9 @@ defmodule EsprezzoCore.BlockChain.Settlement.Structs.BlockHeader do
     version: Integer.t,
     previous_hash: String.t,
     txns_merkle_root: String.t,
-    timestamp: Integer.t
+    timestamp: Integer.t,
+    nonce: Integer.t,
+    difficulty_target: Integer.t
   }
 
   @derive [Poison.Encoder]
@@ -12,7 +14,9 @@ defmodule EsprezzoCore.BlockChain.Settlement.Structs.BlockHeader do
     :version,
     :previous_hash,
     :txns_merkle_root,
-    :timestamp
+    :timestamp,
+    :nonce,
+    :difficulty_target
   ]
 
 end

@@ -4,7 +4,8 @@ defmodule EsprezzoCore.BlockChain.Settlement.Structs.Transaction do
     version: Integer.t,
     timestamp: Integer.t,
     vin: List.t,
-    vout: List.t
+    vout: List.t,
+    meta: :String.t
   }
 
   @derive [Poison.Encoder]
@@ -12,7 +13,8 @@ defmodule EsprezzoCore.BlockChain.Settlement.Structs.Transaction do
     :version,
     :timestamp,
     :vin,
-    :vout
+    :vout,
+    :meta
   ]
 
 end

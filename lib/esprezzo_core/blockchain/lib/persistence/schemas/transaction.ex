@@ -9,13 +9,14 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Transaction do
     field :block_hash, :string
     field :txid, :string
     field :timestamp, :integer, null: false
+    field :meta, :string
     embeds_many :vin, Input
     embeds_many :vout, Output
   end
 
   def changeset(block, attrs) do
     block
-    |> cast(attrs, [:version, :timestamp, :block_hash, :txid])
+    |> cast(attrs, [:version, :timestamp, :block_hash, :txid, :meta])
     |> Ecto.Changeset.put_embed(:vin, attrs.vin)
     |> Ecto.Changeset.put_embed(:vout, attrs.vout)
     |> validate_required([:timestamp, :block_hash, :txid, :version])

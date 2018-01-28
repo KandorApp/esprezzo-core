@@ -5,6 +5,7 @@ defmodule EsprezzoCore.Blockchain do
   alias EsprezzoCore.Blockchain.Settlement.CoreChain
   alias EsprezzoCore.Crypto.Hash
   alias EsprezzoCore.Crypto.Base58
+  alias EsprezzoCore.BlockChain.Settlement.BlockValidator
   @doc """
     Clear Chain and reinitialize database with genesis block
     EsprezzoCore.Blockchain.reinitialize_core
@@ -21,6 +22,9 @@ defmodule EsprezzoCore.Blockchain do
     CoreChain.best_block()
   end
 
+  def block_is_valid?(block) do
+    BlockValidator.is_valid?(block)
+  end
 
-
+  
 end

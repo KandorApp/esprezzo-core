@@ -11,12 +11,13 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Block do
     embeds_one :header, Header
     field :header_hash, :string, null: false
     field :timestamp, :integer, null: false
+    field :meta, :string
   end
 
   @doc false
   def changeset(block, attrs) do
     block
-    |> cast(attrs, [:timestamp, :header_hash])
+    |> cast(attrs, [:timestamp, :header_hash, :meta])
     |> Ecto.Changeset.put_embed(:header, attrs.header)
     |> validate_required([:timestamp, :header_hash])
   end
@@ -29,18 +30,20 @@ defmodule Header do
     field :previous_hash, :string
     field :txns_merkle_root
     field :timestamp, :integer
+    field :nonce, :integer
+    field :difficulty_target, :integer
   end
 end
  
-defmodule Transaction do
-  use Ecto.Schema
-  embedded_schema do
-    field :version, :integer
-    field :txid, :string
-    field :vin, {:array, :map}
-    field :vout, {:array, :map}
-  end
-end
+# defmodule Transaction do
+#   use Ecto.Schema
+#   embedded_schema do
+#     field :version, :integer
+#     field :txid, :string
+#     field :vin, {:array, :map}
+#     field :vout, {:array, :map}
+#   end
+# end
 
 defmodule Output do
   use Ecto.Schema

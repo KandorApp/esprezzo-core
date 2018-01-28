@@ -8,6 +8,7 @@ defmodule EsprezzoCore.Repo.Migrations.CreateLedgerTransactions do
       add :block_hash, :string
       add :timestamp, :integer
       add :txid, :string
+      add :meta, :string
       add :vin, {:array, :map}, default: []
       add :vout, {:array, :map}, default: []
     end
