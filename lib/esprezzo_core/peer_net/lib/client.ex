@@ -32,8 +32,11 @@ defmodule EsprezzoCore.PeerNet.Client do
       |> Enum.map(fn x ->
         [ip, port] = String.split(x, ":")
         {port, _} = Integer.parse(port)
-        {:ok, pid} = __MODULE__.connect(ip, port, node_uuid)
-        {ip, port, node_uuid, pid}
+        case  __MODULE__.connect(ip, port, node_uuid) do
+          {:ok, pid} -> {ip, port, node_uuid, pid}
+          {:error, reason} -> 
+            {:error, reason}
+        end
     end)
   end
 
