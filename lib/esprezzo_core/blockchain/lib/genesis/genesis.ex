@@ -35,7 +35,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
         previous_hash: "0x",
         txns_merkle_root: "0x",
         timestamp: gen_timestamp,
-        difficulty_target: 1000000000000000000000000000000000000000000000000000000000000000000000000,
+        difficulty_target: 10000000000000000000000000000000000000000000000000000000000000000000000000,
         nonce: 138139
       }
     } 
