@@ -104,33 +104,37 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     GenServer.call(__MODULE__, :status, :infinity)
   end
   def handle_call({:push_block, block}, _from, state) do
-    
-    IEx.pry
-    block_index = state.block_index ++ [block.header_hash]
   
-    blocks = Map.put(state.blocks, block.header_hash, block)
-    
-    transactions = Enum.reduce(block.txns, state.transactions, fn (x, acc) -> 
-      Map.put(acc, x.txid, x)
-    end)
+    case Enum.member?(state.block_index, block.header_hash) do
+      true -> 
+        Logger.warn "Block #{block.header_hash} already exists in index // NOOP"
+      false -> 
+        block_index = state.block_index ++ [block.header_hash]
+        
+        blocks = Map.put(state.blocks, block.header_hash, block)
+        
+        transactions = Enum.reduce(block.txns, state.transactions, fn (x, acc) -> 
+          Map.put(acc, x.txid, x)
+        end)
+        
+        block_txn_index = block.txns
+          |> Enum.reduce(state.block_txn_index, fn (x, acc) -> 
+            case Map.has_key?(acc, x.txid) do
+              true ->
+                Map.put(acc, x.block_hash,  acc ++ [x.txid])
+              false ->
+                Map.put(acc, x.block_hash, [x.txid])
+            end
+          end)
+        
+        state = state
+          |> Map.put(:block_index, block_index)
+          |> Map.put(:transactions, transactions)
+          |> Map.put(:blocks, blocks)
+          |> Map.put(:block_txn_index, block_txn_index)
 
-    block_txn_index = block.txns
-    |> Enum.reduce(state.block_txn_index, fn (x, acc) -> 
-      case Map.has_key?(acc, x.txid) do
-        true ->
-          Map.put(acc, x.block_hash,  acc ++ [x.txid])
-        false ->
-          Map.put(acc, x.block_hash, [x.txid])
-      end
-    end)
-
-    state = state
-      |> Map.put(:block_index, block_index)
-      |> Map.put(:transactions, transactions)
-      |> Map.put(:blocks, blocks)
-      |> Map.put(:block_txn_index, block_txn_index)
-
-    EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
+        EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
+    end
       
     {:reply, state, state}
   end
