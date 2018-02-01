@@ -51,7 +51,7 @@ defmodule EsprezzoCoreWeb.Endpoint do
       #port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
       port = System.get_env("PORT") [30342]
       Logger.warn "USING ENV CONFIG"
-      Logger.warn "#{System.get_env("PORT")}"
+      Logger.warn "#{port}"
       {:ok, Keyword.put(config, :http, [:inet6, port: port])}
     else
       Logger.warn "USING APP CONFIG"
