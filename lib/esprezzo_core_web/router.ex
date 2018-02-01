@@ -5,7 +5,11 @@ defmodule EsprezzoCoreWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", EsprezzoCoreWeb do
+  scope "/", EsprezzoCoreWeb do
     pipe_through :api
+    get  "/blocks", BlockController, :all
+    get  "/transactions", BlockController, :txns
+    get  "/status", StatusController, :index
+    get  "/ping", StatusController, :ping
   end
 end

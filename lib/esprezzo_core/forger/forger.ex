@@ -2,15 +2,8 @@ defmodule EsprezzoCore.Blockchain.Forger do
   require Logger
   require IEx
   use GenServer
-  alias EsprezzoCore.Crypto.Hash
-  alias EsprezzoCore.Crypto.Base58
-  alias EsprezzoCore.Blockchain
-  alias EsprezzoCore.Blockchain.Settlement.CoreChain
-  alias EsprezzoCore.BlockChain.Settlement.Structs.{BlockHeader, Block}
-  alias EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis
-  alias EsprezzoCore.Blockchain.Forger.Hashery
 
-  @target_diff 100000000000000000000000000000000000000000000000000000000000000000000000000
+  alias EsprezzoCore.Blockchain.Forger.Hashery
                
   @doc"""
   Setup
@@ -45,8 +38,6 @@ defmodule EsprezzoCore.Blockchain.Forger do
     schedule_forge(state)
     {:noreply, state}
   end
-
-  
 
   defp schedule_forge(state) do
     Process.send_after(self(), :forge_block, 10000)

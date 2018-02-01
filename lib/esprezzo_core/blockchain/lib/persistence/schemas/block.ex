@@ -1,11 +1,11 @@
 defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Block do
   use Ecto.Schema
   use EsprezzoCore.Blockchain.Persistence.QueryMacros
-  require IEx
-  import Ecto.Changeset
-  #alias EsprezzoCore.Blockchain.Persistence.Schemas.Block
 
-  #@primary_key {:id, :binary_id, autogenerate: true}
+  import Ecto.Changeset
+  import Ecto.Query
+  
+  alias EsprezzoCore.Repo
   
   schema "ledger_blocks" do
     embeds_one :header, Header
@@ -20,6 +20,14 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Block do
     |> cast(attrs, [:timestamp, :header_hash, :meta])
     |> Ecto.Changeset.put_embed(:header, attrs.header)
     |> validate_required([:timestamp, :header_hash])
+  end
+
+  @doc false
+  def find(hash) do
+    __MODULE__
+      |> where([b], fragment("header_hash = ?", ^hash))
+      |> order_by([b], desc: b.timestamp)
+      |> Repo.one
   end
 end
 

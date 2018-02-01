@@ -3,6 +3,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain do
   alias EsprezzoCore.BlockChain.Settlement.Structs.{Block, BlockHeader, Transaction}
   alias EsprezzoCore.BlockChain.Settlement.BlockValidator
   alias EsprezzoCore.Blockchain.Persistence
+  alias EsprezzoCore.Blockchain.CoreMeta
   alias EsprezzoCore.Blockchain.Forger
   alias EsprezzoCore.Crypto.Hash
 
@@ -19,10 +20,11 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain do
   # end
 
 
-  @spec best_block() :: Block
-  def best_block() do
-    Persistence.best_block()
-  end
+  # @spec best_block() :: Block
+  # def best_block() do
+  #   #Persistence.best_block()
+  #   CoreMeta.best_block
+  # end
 
   @spec current_height() :: Integer.t
   def current_height() do

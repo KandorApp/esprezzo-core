@@ -19,7 +19,14 @@ defmodule EsprezzoCore.PeerNet.TCPServer do
     Logger.info(fn ->
       "Listening for connections on port #{Keyword.get(opts, :port)}"
     end)
-    {:ok, pid}
+    
+    {:ok, %{pid: pid, node_uuid: node_uuid}}
   end
 
+  def get_state() do
+    GenServer.call(__MODULE__, :get_state, :infinity)
+  end
+  def handle_call(:get_state, _from, state) do
+    {:reply, state, state}
+  end
 end

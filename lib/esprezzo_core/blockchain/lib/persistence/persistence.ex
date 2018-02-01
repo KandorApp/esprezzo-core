@@ -2,19 +2,30 @@ defmodule EsprezzoCore.Blockchain.Persistence do
   require IEx
   require Logger
   alias EsprezzoCore.Blockchain.Persistence.Schemas.{Block, Transaction}
+  alias EsprezzoCore.BlockChain.Settlement.Structs
   alias EsprezzoCore.Repo
 
   @doc """
     EsprezzoCore.Blockchain.Persistence.clear_blocks
     EsprezzoCore.Blockchain.Settlement.CoreChain.reinitialize()
   """
+  def clear_all do
+    clear_blocks()
+    clear_transactions()
+  end
+
   def clear_blocks do
     Block
     |> Repo.delete_all
   end
 
-  @doc """
+  def clear_transactions do
+    Transaction
+    |> Repo.delete_all
+  end
 
+  @doc """
+    TODO: wrap in sql transaction
   """
   def persist_block(block) do
     Logger.warn "Persisting block: #{block.header_hash}"
@@ -29,7 +40,7 @@ defmodule EsprezzoCore.Blockchain.Persistence do
           Logger.error "Could not persist txn: #{txn.txid}"
       end
     end)
-    block_data = Map.from_struct(Map.delete(block, :txns))
+    block_data = Map.delete(block, :txns)
     block_data = Map.put(block_data, :header, Map.from_struct(block_data.header))
     case _persist_block(block_data) do
       {:ok, block} ->
@@ -41,7 +52,28 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     end
   end
 
+
+  @doc """
+    EsprezzoCore.Blockchain.Persistence.load_block(hash)
+  """
+  def load_block(hash) do
+      case Block.find(hash) do
+        nil -> nil
+        block -> 
+          transactions = Enum.map(Transaction.for_block(block.header_hash), fn t -> 
+            t
+            |> Map.put(:vin, Enum.map(t.vin, fn x -> sanitize(x) end))
+            |> Map.put(:vout, Enum.map(t.vout, fn x -> sanitize(x) end))
+            |> sanitize()
+          end)
+          Map.put(block, :txns, transactions)
+            |> Map.put(:header, sanitize(block.header))
+            |> sanitize()
+      end
+  end
+
   def _persist_block(block_map) do
+    block_map = sanitize(block_map)
     cs = Block.changeset(%Block{}, block_map)
     Repo.insert(cs)
   end
@@ -55,8 +87,14 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     Block.last
   end
 
+  def genblock() do
+    b = Block.first
+    load_block(b.header_hash)
+  end
+
   def load_chain() do
     Block.all()
+    |> Enum.map(fn x -> Map.put(x, :header, sanitize(x.header)) end)
   end
 
   def load_transactions() do
@@ -67,7 +105,8 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     Block.count()
   end
 
-  defp sanitize(map) do
+  def sanitize(map) do
     Map.drop(map, [:__meta__, :__struct__])
   end
+
 end

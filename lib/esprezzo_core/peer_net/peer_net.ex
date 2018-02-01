@@ -1,4 +1,5 @@
 defmodule EsprezzoCore.PeerNet do
+  require IEx
 
   alias EsprezzoCore.PeerNet.PeerTracker
   alias EsprezzoCore.PeerNet.Client
@@ -42,4 +43,8 @@ defmodule EsprezzoCore.PeerNet do
       end)
   end
 
+  def local_node_uuid() do
+    EsprezzoCore.PeerNet.TCPServer.get_state()
+    |> Map.get(:node_uuid)
+  end
 end

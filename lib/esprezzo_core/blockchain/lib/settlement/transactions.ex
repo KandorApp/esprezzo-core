@@ -23,15 +23,22 @@ defmodule EsprezzoCore.Blockchain.Settlment.Transactions do
     Reduce the entire list of txns to a root hash
   """
   def write_merkle_root_to_block_header(block) do
-    root = Enum.reduce(block.txns, "", fn (x, acc) -> 
+    root = compute_transactions_merkle_root(block)
+    Map.put(block, :header, Map.put(block.header, :txns_merkle_root, root))
+  end
+ 
+  @doc """
+    Reduce the entire list of txns to a root hash
+    by concatenating txid hashes then hashing the result
+  """
+  def compute_transactions_merkle_root(block) do
+    Enum.reduce(block.txns, "", fn (x, acc) -> 
       acc <> x.txid
     end)
     |> Hash.sha256()
     |> Hash.sha256()
     |> String.downcase()
-    Map.put(block, :header, Map.put(block.header, :txns_merkle_root, root))
   end
- 
   @doc """
     Reduce the entire list of inputs to a single hash
   """
@@ -80,7 +87,7 @@ defmodule EsprezzoCore.Blockchain.Settlment.Transactions do
   end
 
   @doc """
-    Hash a single input
+    Hash a single output
   """
   @spec hash_output(Map.t) :: String.t
   def hash_output(%{val: val, locking_contract: contract }) do  

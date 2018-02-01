@@ -3,7 +3,8 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Transaction do
   use EsprezzoCore.Blockchain.Persistence.QueryMacros
   require IEx
   import Ecto.Changeset
-
+  alias EsprezzoCore.Repo
+  
   schema "ledger_transactions" do
     field :version, :integer
     field :block_hash, :string
@@ -21,7 +22,13 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Transaction do
     |> Ecto.Changeset.put_embed(:vout, attrs.vout)
     |> validate_required([:timestamp, :block_hash, :txid, :version])
   end
-  
+
+  def for_block(hash) do
+    __MODULE__
+      |> where([b], fragment("block_hash = ?", ^hash))
+      |> order_by([b], desc: b.timestamp)
+      |> Repo.all
+    end
 end
 
 defmodule Output do

@@ -15,8 +15,8 @@ use Mix.Config
 # which you typically run after static files are built.
 config :esprezzo_core, EsprezzoCoreWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "node@host", port: 19043],
-  p2p_port: String.to_integer(System.get_env("PORT") || "19876")
+  url: [host: "node@host", port: 30342],
+  p2p_port: String.to_integer(System.get_env("PORT") || "30343")
 # Do not print debug messages in production
 config :logger, level: :info
 
