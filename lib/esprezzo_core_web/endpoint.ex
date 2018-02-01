@@ -1,6 +1,7 @@
 defmodule EsprezzoCoreWeb.Endpoint do
   require IEx
   use Phoenix.Endpoint, otp_app: :esprezzo_core
+  require Logger
 
   socket "/socket", EsprezzoCoreWeb.UserSocket
 
@@ -46,12 +47,13 @@ defmodule EsprezzoCoreWeb.Endpoint do
   configuration should be loaded from the system environment.
   """
   def init(_key, config) do
-    IEx.pry
     if config[:load_from_system_env] do
       #port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
       port = System.get_env("PORT") [30342]
+      Logger.warn "USING ENV CONFIG"
       {:ok, Keyword.put(config, :http, [:inet6, port: port])}
     else
+      Logger.warn "USING APP CONFIG"
       {:ok, config}
     end
   end
