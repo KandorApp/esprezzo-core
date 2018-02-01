@@ -15,6 +15,11 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
     command_struct = Poison.decode!(message, keys: :atoms)
 
     case command_struct.command do
+      "STATUS" ->
+        Logger.warn(fn ->
+          "Received STATUS from #{inspect(message)}"
+        end)
+        {:ok, Commands.build("PONG")}
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG to #{remote_addr}"
