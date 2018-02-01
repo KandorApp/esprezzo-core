@@ -50,6 +50,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     transaction_map = ChainBuilder.build_transaction_map(transactions)
     blockchain = ChainBuilder.build_blockchain(blocks, transaction_map, block_txn_index)
     BlockValidator.validate_blocks(Map.values(blockchain))
+    Logger.warn "Stored Block Height: #{Enum.count(block_index)}"
     {:ok, %{
       :block_index => block_index,
       :txn_index => txn_index,
