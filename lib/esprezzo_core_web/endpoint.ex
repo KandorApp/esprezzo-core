@@ -1,4 +1,5 @@
 defmodule EsprezzoCoreWeb.Endpoint do
+  require IEx
   use Phoenix.Endpoint, otp_app: :esprezzo_core
 
   socket "/socket", EsprezzoCoreWeb.UserSocket
@@ -48,6 +49,7 @@ defmodule EsprezzoCoreWeb.Endpoint do
     if config[:load_from_system_env] do
       #port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
       port = System.get_env("PORT") [30342]
+      IEx.pry
       {:ok, Keyword.put(config, :http, [:inet6, port: port])}
     else
       {:ok, config}
