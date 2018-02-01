@@ -16,7 +16,7 @@ use Mix.Config
 config :esprezzo_core, EsprezzoCoreWeb.Endpoint,
   load_from_system_env: true,
   url: [host: "core-1.esprezzo.io", port: 30342],
-  p2p_port: String.to_integer(System.get_env("PORT") || "30343"),
+  p2p_port: String.to_integer(System.get_env("PORT") || "30343")
 # Do not print debug messages in production
 config :logger, level: :info
 
