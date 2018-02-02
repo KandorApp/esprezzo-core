@@ -26,7 +26,6 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
   ]
     
   def build do
-    IEx.pry
     %__MODULE__{
       :command => "STATUS",
       :protocol_version => "0x00",
