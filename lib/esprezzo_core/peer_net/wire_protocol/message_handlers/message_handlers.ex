@@ -40,15 +40,16 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           false ->
             {:error, Commands.build("DISCONNECT")}
         end
-        
+
       # Handles New block either coming in from a peer or generated locally
       "NEW_BLOCK" ->
         Logger.warn(fn ->
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
           "ARE WE VALIDATING THIS?"
         end)
+        IEx.pry
         block = command_struct.blockData
-        # IEx.pry
+        
         EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         :ok
     
