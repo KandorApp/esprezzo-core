@@ -19,7 +19,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received STATUS from #{inspect(message)}"
         end)
-        {:ok, Commands.build("STATUS")}
+        IEx.pry
+        #{:ok, Commands.build("STATUS")}
+        :noreply
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG to #{remote_addr}"
