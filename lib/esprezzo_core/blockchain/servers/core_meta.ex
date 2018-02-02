@@ -41,8 +41,10 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
             Genesis.reinitialize()
             blocks = Persistence.load_chain()
         end
-      0 ->
-        Logger.warn "Genesis Block Exists"
+      _ ->
+        Logger.warn "Genesis block not available.. reloading"
+        Genesis.reinitialize()
+        blocks = Persistence.load_chain()
     end
     Logger.warn "LOADED #{Enum.count(blocks)} BLOCKS FROM STORAGE"
     block_index = ChainBuilder.build_block_index(blocks)
