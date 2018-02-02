@@ -31,7 +31,7 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
       :protocol_version => "0x00",
       :network_id => 1,
       :best_hash => Blockchain.CoreMeta.best_block().header_hash,
-      :genesis_hash => Blockchain.CoreMeta.genesis_block(),
+      :genesis_hash => Blockchain.CoreMeta.genesis_block().header_hash,
       :block_height => Blockchain.current_height()
     }
   end
