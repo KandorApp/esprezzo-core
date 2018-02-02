@@ -11,27 +11,27 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
   def send("PING", pid) do
     Peer.send_message(pid, Ping.build)
   end
-  
   def build("PING") do
     Ping.build
   end
-  
+
   @doc"""
   Use public API to emit genserver 
   callback msg for pid
-  """
-  def send("PONG", pid) do
-    Peer.send_message(pid, Pong.build)
-  end
-
-  @doc"""
-  Only return the command struct so
-  we can send from calling process
   """
   def build("PONG") do
     Pong.build
   end
 
+  def send("PONG", pid) do
+    Peer.send_message(pid, Pong.build)
+  end
+
+ 
+  @doc"""
+  Use public API to emit genserver 
+  callback msg for pid
+  """
   def build("HELLO") do
     Hello.build
   end

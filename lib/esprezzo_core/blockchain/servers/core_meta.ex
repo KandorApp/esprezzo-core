@@ -173,7 +173,6 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
             transaction_index ++ ChainBuilder.build_txn_index(block.txns)
         end
         
-        
         blocks = Map.put(state.blocks, block.header_hash, block)
         
         transactions = Enum.reduce(block.txns, state.transactions, fn (x, acc) -> 

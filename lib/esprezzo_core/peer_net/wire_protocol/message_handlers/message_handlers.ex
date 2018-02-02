@@ -19,7 +19,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received STATUS from #{inspect(message)}"
         end)
-        {:ok, Commands.build("PONG")}
+        {:ok, Commands.build("STATUS")}
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG to #{remote_addr}"
@@ -29,7 +29,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received PONG // from #{inspect(socket)} // #{remote_addr}"
         end)
-        :ok
+        :noreply
       "HELLO" ->
         Logger.warn(fn ->
           "Received HELLO from #{inspect(socket)} // Checking Version compatibility with #{remote_addr}"
@@ -40,9 +40,15 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           false ->
             {:error, Commands.build("DISCONNECT")}
         end
+
+      """
+      Handles New block either coming in from a peer or
+      generated locally.
+      """  
       "NEW_BLOCK" ->
         Logger.warn(fn ->
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
+          "ARE WE VALIDATING THIS?"
         end)
         block = command_struct.blockData
         # IEx.pry
