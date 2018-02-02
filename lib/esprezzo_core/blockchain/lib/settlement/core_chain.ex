@@ -26,10 +26,10 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain do
   #   CoreMeta.best_block
   # end
 
-  @spec current_height() :: Integer.t
-  def current_height() do
-    Persistence.current_height()
-  end
+  # @spec current_height() :: Integer.t
+  # def current_height() do
+  #   Persistence.current_height()
+  # end
 
   @spec validate_block(Block) :: Boolean
   def validate_block(block) do

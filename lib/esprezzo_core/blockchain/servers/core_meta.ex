@@ -39,6 +39,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
           false -> 
             Logger.warn "Genesis Block invalid.. reloading"
             Genesis.reinitialize()
+            blocks = Persistence.load_chain()
         end
       0 ->
         Logger.warn "Genesis Block Exists"
