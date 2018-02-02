@@ -1,5 +1,6 @@
 defmodule EsprezzoCore.WireProtocol.Commands.Status do
-  @moduledoc"""
+  require IEx
+  @moduledoc """
   Command payload definition for Hello/0x00
   """ 
   alias EsprezzoCore.Blockchain
@@ -25,6 +26,7 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
   ]
     
   def build do
+    IEx.pry
     %__MODULE__{
       :command => "STATUS",
       :protocol_version => "0x00",
