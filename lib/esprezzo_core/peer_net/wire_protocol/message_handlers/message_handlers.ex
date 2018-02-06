@@ -9,6 +9,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.WireProtocol
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
+  alias EsprezzoCore.PeerNet.WireProtocol.StatusHandler
 
   def process(message, socket, transport, remote_addr) do
 
@@ -19,7 +20,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received STATUS from #{inspect(message)}"
         end)
-        IEx.pry
+        StatusHandler.process(command_struct)
         #{:ok, Commands.build("STATUS")}
         :noreply
       "PING" ->
