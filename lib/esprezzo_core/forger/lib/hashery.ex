@@ -88,7 +88,7 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
     {value, _} = Integer.parse(hash, 16)
     case value <= @target_diff do
       true ->
-        Logger.warn "We have a winner!"
+        Logger.warn "Block Difficulty Valid"
         Logger.warn "Target: #{@target_diff}"
         Logger.warn "Hash: #{hash}"
         Logger.warn "Hash Integer Val: #{value}"

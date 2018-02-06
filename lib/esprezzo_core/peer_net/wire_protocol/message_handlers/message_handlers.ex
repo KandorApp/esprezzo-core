@@ -49,7 +49,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
           "ARE WE VALIDATING THIS?"
         end)
-        IEx.pry
+        #IEx.pry
         block = command_struct.blockData
         
         EsprezzoCore.Blockchain.CoreMeta.push_block(block)
