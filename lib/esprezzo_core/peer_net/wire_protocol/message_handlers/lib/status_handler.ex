@@ -20,7 +20,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
         # ask for blocks
         {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
       false ->
-        {:noreply, "sync_complete"}
+        Logger.warn("SYNC_COMPLETE")
+        :noreply
     end
   end
 
