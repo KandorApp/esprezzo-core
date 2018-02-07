@@ -176,7 +176,8 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     GenServer.call(__MODULE__, {:push_block, block}, :infinity)
   end
   def handle_call({:push_block, block}, _from, state) do
-    __MODULE__.status()
+    Logger.warn "Block Index Height: #{Enum.count(state.block_index)}"
+    Logger.warn "Block Map Height: #{Enum.count(state.blocks)}"
     case Enum.member?(state.block_index, block.header_hash) do
       true -> 
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP"
