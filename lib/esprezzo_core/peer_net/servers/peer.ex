@@ -75,8 +75,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
       :noreply ->
         {:noreply, state}
       {:ok, command_message} ->
-        if command_message.command == "STATUS" do
-          IEx.pry  
+        if command_message.command == "REQUEST_NEW_BLOCKS" do
+          #IEx.pry  
         end
         network_message = Poison.encode!(command_message)
         inspect(command_message)
