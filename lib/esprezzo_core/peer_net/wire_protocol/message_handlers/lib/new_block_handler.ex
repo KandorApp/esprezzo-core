@@ -14,7 +14,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.NewBlockHandler do
     inspect(command)
     Logger.warn("NEW_BLOCK RECEIVED")
     block = command.blockData
-    EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+    unless block == nil do
+      EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+    end
     :noreply
   end
 
