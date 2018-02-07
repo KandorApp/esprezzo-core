@@ -141,7 +141,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
     command_message = Commands.build("STATUS")
     network_message = Poison.encode!(command_message)
     :ok = transport.send(socket, network_message)
-    schedule_status_notification(remote_addr)
+    # schedule_status_notification(remote_addr)
     {:noreply, state}
   end
 
