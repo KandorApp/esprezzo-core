@@ -1,6 +1,8 @@
 defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
   require Logger
   require IEx
+  alias EsprezzoCore.Blockchain
+
 
 
   @doc """
@@ -12,7 +14,13 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
   """
   def process(command) do
     inspect(command)
-    IEx.pry
+    case command.block_height >= Blockchain.current_height() do
+      true -> 
+        # ask for blocks
+        IEx.pry
+      false ->
+        false
+    end
   end
 
 end
