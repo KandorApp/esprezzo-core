@@ -20,19 +20,27 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         Logger.warn(fn ->
           "Received STATUS from #{inspect(message)}"
         end)
-        StatusHandler.process(command_struct)
-        #{:ok, Commands.build("STATUS")}
+        IEx.pry
+        case PeerNet.local_node_uuid() == command_struct.node_uuid do
+          true ->
+            Logger.warn("INVALID ORIGIN NODE // SELF")
+          false ->
+            StatusHandler.process(command_struct)
+        end
         :noreply
+
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG to #{remote_addr}"
         end)
         {:ok, Commands.build("PONG")}
+
       "PONG" ->
         Logger.warn(fn ->
           "Received PONG // from #{inspect(socket)} // #{remote_addr}"
         end)
         :noreply
+
       "HELLO" ->
         Logger.warn(fn ->
           "Received HELLO from #{inspect(socket)} // Checking Version compatibility with #{remote_addr}"

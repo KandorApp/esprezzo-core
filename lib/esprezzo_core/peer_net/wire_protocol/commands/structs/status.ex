@@ -4,6 +4,7 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
   Command payload definition for Hello/0x00
   """ 
   alias EsprezzoCore.Blockchain
+  alias EsprezzoCore.PeerNet
 
 
   @type t :: %__MODULE__{
@@ -12,7 +13,8 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
     network_id: Integer.t,
     best_hash: String.t,
     genesis_hash: String.t,
-    block_height: Integer.t
+    block_height: Integer.t,
+    node_uuid: String.t
   }
 
   @derive [Poison.Encoder]
@@ -22,7 +24,8 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
     :network_id,
     :best_hash,
     :genesis_hash,
-    :block_height
+    :block_height,
+    :node_uuid
   ]
     
   def build do
@@ -32,7 +35,8 @@ defmodule EsprezzoCore.WireProtocol.Commands.Status do
       :network_id => 1,
       :best_hash => Blockchain.CoreMeta.best_block().header_hash,
       :genesis_hash => Blockchain.CoreMeta.genesis_block().header_hash,
-      :block_height => Blockchain.current_height()
+      :block_height => Blockchain.current_height(),
+      :node_uuid => PeerNet.local_node_uuid()
     }
   end
 
