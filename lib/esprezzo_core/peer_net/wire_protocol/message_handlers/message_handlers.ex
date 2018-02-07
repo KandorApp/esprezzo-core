@@ -50,12 +50,19 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
           "ARE WE VALIDATING THIS?"
         end)
-        #IEx.pry
         block = command_struct.blockData
-        
         EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         :ok
     
+      # Handle Request for blocks at starting index  
+      "REQUEST_BLOCKS" ->
+        Logger.warn(fn ->
+          "Received BLOCK_REQUEST for HEIGHT: #{command_struct.index} // from #{inspect(socket)} // #{remote_addr}"
+          "ARE WE VALIDATING THIS?"
+        end)
+        IEx.pry
+        :ok
+
       message ->
         Logger.warn(fn ->
           "Received unknown message #{inspect(message)} from #{inspect(socket)}."

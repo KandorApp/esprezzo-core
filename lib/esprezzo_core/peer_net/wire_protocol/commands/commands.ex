@@ -27,7 +27,6 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
     Peer.send_message(pid, Pong.build)
   end
 
- 
   @doc"""
   Use public API to emit genserver 
   callback msg for pid
