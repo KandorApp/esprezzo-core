@@ -22,8 +22,10 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
     case Persistence.persist_block(block_candidate) do
       {:ok, block} -> 
         Logger.warn "Storing Block Candidate for height: #{Blockchain.current_height}"
+        
         # update memchain
-        EsprezzoCore.Blockchain.CoreMeta.push_block(block)        
+        # It might make more sense to
+        # return this and not notify from such a deep library
         {:ok, block}
       {:error, changeset} ->
         Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"

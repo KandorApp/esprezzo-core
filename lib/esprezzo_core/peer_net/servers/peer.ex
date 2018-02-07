@@ -75,6 +75,9 @@ defmodule EsprezzoCore.PeerNet.Peer do
       :noreply ->
         {:noreply, state}
       {:ok, command_message} ->
+        if command_message.command == "STATUS" do
+          IEx.pry  
+        end
         network_message = Poison.encode!(command_message)
         inspect(command_message)
         :ok = transport.send(socket, network_message)
@@ -124,6 +127,21 @@ defmodule EsprezzoCore.PeerNet.Peer do
     :ok = transport.send(socket, network_message)
     {:noreply, state}
   end
+
+
+  def send_status(pid) do
+    Process.send_after(pid, :send_status, 300)
+  end
+  def handle_info(:send_status, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
+    Logger.warn(fn ->
+      "sending STATUS to #{remote_addr}"
+    end)
+    command_message = Commands.build("STATUS")
+    network_message = Poison.encode!(command_message)
+    :ok = transport.send(socket, network_message)
+    {:noreply, state}
+  end
+
 
   @doc """
     EsprezzoCore.PeerNet.Peer.push_block(block)

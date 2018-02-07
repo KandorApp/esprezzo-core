@@ -86,6 +86,22 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   end
 
 
+
+  @doc """
+    iex> EsprezzoCore.PeerNet.PeerManager.notify_peers_with_status()
+  """
+  def notify_peers_with_status() do
+    GenServer.call(__MODULE__, :notify_peers_with_status, :infinity)
+  end
+  def handle_call(:notify_peers_with_status, _from, state) do
+    state.connected_peers
+    |> Enum.each(fn p -> 
+      Logger.warn "Notifying Peer #{p.remote_addr} // #{p.node_uuid} with new status"
+      EsprezzoCore.PeerNet.Peer.send_status(p.pid)
+    end)
+    {:reply, state, state}
+  end
+
   @doc """
   Collect all data from all peers to
   local state. Used on init.

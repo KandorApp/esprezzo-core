@@ -33,14 +33,23 @@ defmodule EsprezzoCore.Blockchain.Forger do
         Logger.warn(fn ->
           "Forging New Block"
         end)
-        EsprezzoCore.Blockchain.Forger.Hashery.forge()
+        case EsprezzoCore.Blockchain.Forger.Hashery.forge() do
+          {:ok, block} ->
+            # Add to local chain
+            EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+            # Notify so they can ask
+            # I guess it might make more sense to push this without the status chatter?
+            EsprezzoCore.PeerNet.PeerManager.notify_peers_with_status()
+          {:error, _} ->
+            Logger.error "Could not forge candidate block"
+        end
     end
     schedule_forge(state)
     {:noreply, state}
   end
 
   defp schedule_forge(state) do
-    Process.send_after(self(), :forge_block, 10000)
+    Process.send_after(self(), :forge_block, 30000)
   end
  
   @doc """
