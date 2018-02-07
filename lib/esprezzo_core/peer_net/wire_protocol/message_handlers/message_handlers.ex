@@ -6,6 +6,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   """
   require Logger
   require IEx
+  
+  alias EsprezzoCore.Blockchain
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.WireProtocol
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
@@ -62,8 +64,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         block = command_struct.blockData
         # Add block to chain
         res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
-        Logger.warn "sending_status_message"
-        {:ok, Commands.build("STATUS")}
+        Logger.warn "New Block Added // Requesting next block"
+        {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
         
       #  Handle Request for blocks at starting index  
       #  Should return block by index by returning command directly to calling peer process  
