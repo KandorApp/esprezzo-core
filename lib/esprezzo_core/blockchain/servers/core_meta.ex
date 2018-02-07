@@ -213,7 +213,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
           |> Map.put(:transactions, transactions)
           |> Map.put(:blocks, blocks)
           
-        EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
+        # EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
     end
       
     {:reply, state, state}

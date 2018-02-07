@@ -61,7 +61,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         end)
         block = command_struct.blockData
         # Add block to chain
-        EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+        res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         {:ok, Commands.build("STATUS")}
     
       #  Handle Request for blocks at starting index  
