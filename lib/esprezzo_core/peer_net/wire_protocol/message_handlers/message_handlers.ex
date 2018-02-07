@@ -62,8 +62,10 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         block = command_struct.blockData
         # Add block to chain
         res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+        :timer.sleep(2000)
+        Logger.warn "sending_status_message"
         {:ok, Commands.build("STATUS")}
-    
+        
       #  Handle Request for blocks at starting index  
       #  Should return block by index by returning command directly to calling peer process  
       "REQUEST_BLOCKS" ->
