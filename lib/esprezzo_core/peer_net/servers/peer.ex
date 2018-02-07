@@ -75,7 +75,6 @@ defmodule EsprezzoCore.PeerNet.Peer do
       :noreply ->
         {:noreply, state}
       {:ok, command_message} ->
-        IEx.pry
         network_message = Poison.encode!(command_message)
         :ok = transport.send(socket, network_message)
         {:noreply, state}
