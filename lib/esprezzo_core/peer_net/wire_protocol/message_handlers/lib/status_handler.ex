@@ -17,7 +17,6 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
     Logger.warn("STATUS RECEIVED // REMOTE HEIGHT: #{command.block_height}")
     case command.block_height >= Blockchain.current_height() do
       true -> 
-        IEx.pry
         # ask for blocks
         {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
       false ->
