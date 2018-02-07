@@ -11,7 +11,8 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
   alias EsprezzoCore.BlockChain.Settlement.Structs.{BlockHeader}
   # alias EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis
   
-  @target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000
+          @target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000
+  @reduced_target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000000
 
   @doc """
   EsprezzoCore.Blockchain.Forger.forge()
@@ -88,7 +89,7 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
   @spec verify(String, Integer.t) :: Boolean.t
   def verify(hash, nonce) do
     {value, _} = Integer.parse(hash, 16)
-    case value <= @target_diff do
+    case value <= @reduced_target_diff do
       true ->
         Logger.warn "Block Difficulty Valid"
         Logger.warn "Target: #{@target_diff}"
