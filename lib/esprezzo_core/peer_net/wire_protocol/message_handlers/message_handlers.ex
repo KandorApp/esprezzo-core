@@ -10,6 +10,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   alias EsprezzoCore.PeerNet.WireProtocol
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
   alias EsprezzoCore.PeerNet.WireProtocol.StatusHandler
+  alias EsprezzoCore.PeerNet.WireProtocol.RequestBlocksHandler
 
   def process(message, socket, transport, remote_addr) do
 
@@ -67,13 +68,12 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           "Received BLOCK_REQUEST for HEIGHT: #{command_struct.index} // from #{inspect(socket)} // #{remote_addr}"
           "ARE WE VALIDATING THIS?"
         end)
-        IEx.pry
-        {:ok, Commands.build("REQUEST_BLOCKS"), command_struct.index}
+        RequestBlocksHandler.process(command_struct)
 
-
+      # Fallback unknown_message
       message ->
         Logger.warn(fn ->
-          "Received unknown message #{inspect(message)} from #{inspect(socket)}."
+          "Received unknown_message #{inspect(message)} from #{inspect(socket)}."
         end)
     end
 
