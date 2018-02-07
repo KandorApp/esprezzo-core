@@ -66,8 +66,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         Logger.warn "New Block Added // Requesting next block"
         :timer.sleep(100)
-        {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
-        
+        #{:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+        {:ok, Commands.build("STATUS")}
+
       #  Handle Request for blocks at starting index  
       #  Should return block by index by returning command directly to calling peer process  
       "REQUEST_BLOCKS" ->

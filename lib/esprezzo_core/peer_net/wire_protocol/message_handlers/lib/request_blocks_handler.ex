@@ -13,11 +13,16 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.RequestBlocksHandler do
   def process(command) do
     inspect(command)
     Logger.warn("REQUEST_BLOCKS_AT_HEIGHT: #{command.index()}")
+    # IEx.pry
     case CoreMeta.get_block_at_height(command.index) do
       nil -> :noreply
       block ->
-        {:ok, Commands.build("NEW_BLOCK", block)}
+        {:ok, Commands.build("NEW_BLOCK", sanitize(block))}
     end
+  end
+
+  defp sanitize(map) do
+    Map.drop(map, [:__meta__, :__struct__])
   end
 
 end
