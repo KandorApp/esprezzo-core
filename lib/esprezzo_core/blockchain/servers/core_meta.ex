@@ -172,8 +172,8 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     EsprezzoCore.Blockchain.CoreMeta.push_block
   """
   def push_block(block) do
+    # GenServer.call(__MODULE__, :status, :infinity)
     GenServer.call(__MODULE__, {:push_block, block}, :infinity)
-    GenServer.call(__MODULE__, :status, :infinity)
   end
   def handle_call({:push_block, block}, _from, state) do
   
