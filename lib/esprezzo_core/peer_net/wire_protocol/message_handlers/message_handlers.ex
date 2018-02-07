@@ -26,7 +26,6 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
             Logger.warn("INVALID ORIGIN NODE // SELF")
             :noreply
           false ->
-            IEx.pry
             StatusHandler.process(command_struct)
         end
       "PING" ->
