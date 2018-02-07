@@ -12,9 +12,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
   """
   def process(command) do
     inspect(command)
-    Logger.warn("REQUEST_BLOCKS RECEIVED FROM: ")
-    Logger.warn("REQUEST_BLOCKS RECEIVED // LOCAL HEIGHT: #{Blockchain.current_height()}")
-    Logger.warn("REQUEST_BLOCKS RECEIVED // REMOTE HEIGHT: #{command.block_height}")
+    Logger.warn("STATUS RECEIVED FROM: ")
+    Logger.warn("STATUS RECEIVED // LOCAL HEIGHT: #{Blockchain.current_height()}")
+    Logger.warn("STATUS RECEIVED // REMOTE HEIGHT: #{command.block_height}")
     case command.block_height >= Blockchain.current_height() do
       true -> 
         IEx.pry
