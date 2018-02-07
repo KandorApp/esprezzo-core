@@ -2,7 +2,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.Commands do
   require IEx
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.Peer
-  alias EsprezzoCore.WireProtocol.Commands.{Ping, Pong, Hello, Disconnect, Status, NewBlock, RequestBlock}
+  alias EsprezzoCore.WireProtocol.Commands.{Ping, Pong, Hello, Disconnect, Status, NewBlock, RequestBlocks}
   
   @doc"""
   Use public API to emit genserver 
