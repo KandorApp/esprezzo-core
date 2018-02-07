@@ -61,7 +61,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           "ARE WE VALIDATING THIS?"
         end)
         IEx.pry
-        :ok
+        {:ok, Commands.build("REQUEST_BLOCKS"), command_struct.index}
+
 
       message ->
         Logger.warn(fn ->
