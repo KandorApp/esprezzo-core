@@ -24,11 +24,11 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         case PeerNet.local_node_uuid() == command_struct.node_uuid do
           true ->
             Logger.warn("INVALID ORIGIN NODE // SELF")
+            :noreply
           false ->
+            IEx.pry
             StatusHandler.process(command_struct)
         end
-        :noreply
-
       "PING" ->
         Logger.warn(fn ->
           "Received PING from #{inspect(socket)} // Sending PONG to #{remote_addr}"
