@@ -103,6 +103,20 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     BlockValidator.validate_blocks(state.blocks)
     {:reply, state, state}
   end
+
+  @doc """
+    EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(index)
+  """
+  def get_block_at_height(idx) do
+    GenServer.call(__MODULE__, {:get_block_at_height, idx}, :infinity)
+  end
+  def handle_call({:get_block_at_height, idx}, _from, state) do
+    hash_key = state.block_index |> Enum.at(idx)
+    block = Map.get(state.blocks, hash_key)
+    {:reply, block, state}
+  end
+
+
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.best_block
   """

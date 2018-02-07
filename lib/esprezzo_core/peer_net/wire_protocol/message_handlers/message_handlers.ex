@@ -52,6 +52,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
             {:error, Commands.build("DISCONNECT")}
         end
 
+        
       # Handles New block either coming in from a peer or generated locally
       "NEW_BLOCK" ->
         Logger.warn(fn ->
@@ -59,10 +60,12 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           "ARE WE VALIDATING THIS?"
         end)
         block = command_struct.blockData
-        EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+        # Add block to chain
+        IEx.pry
         :ok
     
-      # Handle Request for blocks at starting index  
+      #  Handle Request for blocks at starting index  
+      #  Should return block by index by returning command directly to calling peer process  
       "REQUEST_BLOCKS" ->
         Logger.warn(fn ->
           "Received BLOCK_REQUEST for HEIGHT: #{command_struct.index} // from #{inspect(socket)} // #{remote_addr}"

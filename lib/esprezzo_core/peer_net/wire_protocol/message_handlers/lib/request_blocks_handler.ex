@@ -3,7 +3,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.RequestBlocksHandler do
   require IEx
   alias EsprezzoCore.Blockchain
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
-
+  alias EsprezzoCore.Blockchain.CoreMeta
 
 
   @doc """
@@ -13,15 +13,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.RequestBlocksHandler do
   def process(command) do
     inspect(command)
     Logger.warn("REQUEST_BLOCKS_AT_HEIGHT: #{command.index()}")
-    IEx.pry
-    # case command.block_height >= Blockchain.current_height() do
-    #   true -> 
-    #     
-    #     # ask for blocks
-    #     {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
-    #   false ->
-    #     {:noreply, "sync_complete"}
-    # end
+    block = CoreMeta.get_block_at_height(command.index)
+    {:ok, Commands.build("NEW_BLOCK", block)}
   end
 
 end
