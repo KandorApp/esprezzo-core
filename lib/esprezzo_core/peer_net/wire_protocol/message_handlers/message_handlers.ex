@@ -6,7 +6,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   """
   require Logger
   require IEx
-  
+
   alias EsprezzoCore.Blockchain
   alias EsprezzoCore.PeerNet
   alias EsprezzoCore.PeerNet.WireProtocol
@@ -65,6 +65,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         # Add block to chain
         res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         Logger.warn "New Block Added // Requesting next block"
+        :timer.sleep(1000)
         {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
         
       #  Handle Request for blocks at starting index  

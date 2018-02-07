@@ -176,11 +176,12 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     GenServer.call(__MODULE__, {:push_block, block}, :infinity)
   end
   def handle_call({:push_block, block}, _from, state) do
-  
+    __MODULE__.status()
     case Enum.member?(state.block_index, block.header_hash) do
       true -> 
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP"
       false -> 
+        Logger.warn "Adding Block #{block.header_hash}"
         block_index = state.block_index ++ [block.header_hash]
 
         txn_index = case state.txn_index  do
