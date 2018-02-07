@@ -18,6 +18,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
     case command.block_height >= Blockchain.current_height() do
       true -> 
         # ask for blocks
+        IEx.pry
         {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
       false ->
         Logger.warn("SYNC_COMPLETE")
