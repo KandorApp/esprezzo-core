@@ -8,8 +8,10 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
 
   Does the sender have a higher block count that I do?
 
+
   """
   def process(command) do
+    inspect(command)
     IEx.pry
   end
 
