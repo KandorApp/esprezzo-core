@@ -25,7 +25,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
       |> Map.put(:transport, transport)
       |> Map.put(:node_uuid, node_uuid)
       |> Map.put(:pid, self())
-     
+
+      schedule_status_notification(state.remote_addr)
       schedule_hello()
     {:ok, state}
   end
@@ -135,11 +136,12 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
   def handle_info(:send_status, %{socket: socket, transport: transport, remote_addr: remote_addr} = state) do
     Logger.warn(fn ->
-      "sending STATUS to #{remote_addr}"
+      "sending STATUS to #{remote_addr} and rescheduling"
     end)
     command_message = Commands.build("STATUS")
     network_message = Poison.encode!(command_message)
     :ok = transport.send(socket, network_message)
+    schedule_status_notification(remote_addr)
     {:noreply, state}
   end
 
@@ -168,6 +170,10 @@ defmodule EsprezzoCore.PeerNet.Peer do
 
   defp schedule_hello() do
     Process.send_after(self(), :send_hello, 1000)
+  end
+
+  defp schedule_status_notification(remote_addr) do
+    Process.send_after(self(), :send_status, 10000)
   end
 
   defp sanitize(map) do

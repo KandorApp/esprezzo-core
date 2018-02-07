@@ -101,6 +101,14 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     end)
     {:reply, state, state}
   end
+  def handle_info(:notify_peers_with_status, state) do
+    state.connected_peers
+    |> Enum.each(fn p -> 
+      Logger.warn "Notifying Peer #{p.remote_addr} // #{p.node_uuid} with new status"
+      EsprezzoCore.PeerNet.Peer.send_status(p.pid)
+    end)
+    {:reply, state}
+  end
 
   @doc """
   Collect all data from all peers to
@@ -112,7 +120,6 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
         EsprezzoCore.PeerNet.Peer.peer_state(pid)
       end)
   end
-
-
+ 
 
 end
