@@ -39,8 +39,9 @@ defmodule EsprezzoCore.Blockchain.Forger do
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
             # Notify so they can ask
             # I guess it might make more sense to push this without the status chatter?
-            :timer.sleep(333)
-            EsprezzoCore.PeerNet.PeerManager.notify_peers_with_status()
+            #:timer.sleep(33)
+            #EsprezzoCore.PeerNet.PeerManager.notify_peers_with_status()
+            EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
           {:error, _} ->
             Logger.error "Could not forge candidate block"
         end
@@ -50,7 +51,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
   end
 
   defp schedule_forge(state) do
-    Process.send_after(self(), :forge_block, 30000)
+    Process.send_after(self(), :forge_block, 7000)
   end
  
   @doc """
