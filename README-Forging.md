@@ -1,9 +1,9 @@
-#Forging Overview
+# Forging Overview
 
-Forger is always running on all full nodes
+## PoW and PoS
 
-what is out block time
+## Block Time
 
-where does that end up with inflation and new coings?
+## Emission Schedule
 
-do we use light proof of work or not
+## Forging Rewards
