@@ -68,12 +68,13 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           true -> 
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
             Logger.warn "New VALID Block Added // Requesting next block"
-            :timer.sleep(333)
             {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
           false ->
             Logger.warn "New Block FAILED VALIDATION // Requesting next block"
-            #{:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+            :timer.sleep(666)
             :noreply
+            {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+            
         end
      
       #  Handle Request for blocks at starting index  
