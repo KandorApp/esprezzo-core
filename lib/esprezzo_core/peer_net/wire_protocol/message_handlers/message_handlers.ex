@@ -65,7 +65,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         # Add block to chain
         res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         Logger.warn "New Block Added // Requesting next block"
-        :timer.sleep(33)
+        #:timer.sleep(33)
         {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
         
 
