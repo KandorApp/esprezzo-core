@@ -26,7 +26,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
        
         case PeerNet.local_node_uuid() == command_struct.node_uuid do
           true ->
-            Logger.warn("INVALID ORIGIN NODE // SELF")
+            # Logger.warn("INVALID ORIGIN NODE // SELF")
             :noreply
           false ->
             StatusHandler.process(command_struct)
