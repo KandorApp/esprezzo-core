@@ -11,8 +11,6 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
   def validate_chain(blocks, block_index, cur_block \\ 0) do
     case Enum.count(blocks) > 0 do
       true ->
-        [genesis | blocks] = blocks
-        IEx.pry
         [block | blocks] = blocks
         case is_valid?(block, block_index) do
           true -> 
