@@ -93,4 +93,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
 
   end
 
+  def is_struct?(map) do
+    Map.has_key?(map, :__struct__)
+  end
+
 end

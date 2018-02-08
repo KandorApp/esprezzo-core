@@ -43,8 +43,14 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
   """
   @spec is_valid?(Block.t(), List.t(Map.t)) :: Boolean
   def is_valid?(block, block_index) do
-    with delta_hash <- hash_header(block.header),
-      true <- difficulty_is_valid?(block.header, delta_hash),
+    header = case is_struct?(block.header) do
+      false ->
+        struct(BlockHeader, block.header)
+      true ->
+        block.header
+    end
+    with delta_hash <- hash_header(header),
+      true <- difficulty_is_valid?(header, delta_hash),
       true <- hash_is_valid?(block, delta_hash),
       true <- parent_index_exists?(block.header.previous_hash, block_index),
       do: true
@@ -104,6 +110,10 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     "#{v}#{h}#{ts}#{mr}#{nonce}"
       |> Hash.sha256()
       |> String.downcase()
+  end
+
+  def is_struct?(map) do
+    Map.has_key?(map, :__struct__)
   end
 
   def empty?([]), do: true
