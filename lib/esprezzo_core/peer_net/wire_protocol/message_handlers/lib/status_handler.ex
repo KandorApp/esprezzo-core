@@ -15,7 +15,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
     Logger.warn("STATUS RECEIVED FROM: ")
     Logger.warn("STATUS RECEIVED // LOCAL HEIGHT: #{Blockchain.current_height()}")
     Logger.warn("STATUS RECEIVED // REMOTE HEIGHT: #{command.block_height}")
-    case command.block_height >= Blockchain.current_height() do
+    case command.block_height > Blockchain.current_height() do
       true -> 
         # ask for blocks
         Logger.warn("REQUESTING NEW BLOCK #{Blockchain.current_height()}")

@@ -4,11 +4,12 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   
   use GenServer
 
+  alias EsprezzoCore.Blockchain
   alias EsprezzoCore.Blockchain.Persistence
   alias EsprezzoCore.Blockchain.ChainBuilder
   alias EsprezzoCore.BlockChain.Settlement.BlockValidator
   alias EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis  
-  
+
   @doc """
     Setup
   """
@@ -120,6 +121,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   """
   def validate_blocks() do
     GenServer.call(__MODULE__, :validate_blocks, :infinity)
+    :ok
   end
   def handle_call(:validate_blocks, _from, state) do
     genesis_hash = state.block_index
@@ -199,6 +201,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
 
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.push_block
+    Only way to add a block to the chain and to persistent storage
   """
   def push_block(block) do
     # GenServer.call(__MODULE__, :status, :infinity)
@@ -211,39 +214,48 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
       true -> 
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP"
       false -> 
-        Logger.warn "Adding Block #{block.header_hash}"
-        block_index = state.block_index ++ [block.header_hash]
+        case Persistence.persist_block(block) do
+          {:ok, block} -> 
+            Logger.warn "Storing Block Candidate for height: #{Enum.count(state.block_index)}"
+            Logger.warn "Adding Block #{block.header_hash}"
+            block_index = state.block_index ++ [block.header_hash]
 
-        txn_index = case state.txn_index  do
-          [] -> [ChainBuilder.build_txn_index(block.txns)]
-          nil -> [ChainBuilder.build_txn_index(block.txns)]
-          transaction_index ->
-            transaction_index ++ ChainBuilder.build_txn_index(block.txns)
+            txn_index = case state.txn_index  do
+              [] -> [ChainBuilder.build_txn_index(block.txns)]
+              nil -> [ChainBuilder.build_txn_index(block.txns)]
+              transaction_index ->
+                transaction_index ++ ChainBuilder.build_txn_index(block.txns)
+            end
+            
+            blocks = Map.put(state.blocks, block.header_hash, block)
+            
+            transactions = Enum.reduce(block.txns, state.transactions, fn (x, acc) -> 
+              Map.put(acc, x.txid, x)
+            end)
+            
+            block_txn_index = block.txns
+              |> Enum.reduce(state.block_txn_index, fn (x, acc) -> 
+                case Map.has_key?(acc, x.txid) do
+                  true ->
+                    Map.put(acc, x.block_hash, acc ++ [x.txid])
+                  false ->
+                    Map.put(acc, x.block_hash, [x.txid])
+                end
+              end)
+            
+              
+            state = state
+              |> Map.put(:block_index, block_index)
+              |> Map.put(:txn_index, txn_index)
+              |> Map.put(:block_txn_index, block_txn_index)
+              |> Map.put(:transactions, transactions)
+              |> Map.put(:blocks, blocks)
+          
+          {:error, changeset} ->
+            Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
+            {:error, changeset}
         end
         
-        blocks = Map.put(state.blocks, block.header_hash, block)
-        
-        transactions = Enum.reduce(block.txns, state.transactions, fn (x, acc) -> 
-          Map.put(acc, x.txid, x)
-        end)
-        
-        block_txn_index = block.txns
-          |> Enum.reduce(state.block_txn_index, fn (x, acc) -> 
-            case Map.has_key?(acc, x.txid) do
-              true ->
-                Map.put(acc, x.block_hash, acc ++ [x.txid])
-              false ->
-                Map.put(acc, x.block_hash, [x.txid])
-            end
-          end)
-        
-        state = state
-          |> Map.put(:block_index, block_index)
-          |> Map.put(:txn_index, txn_index)
-          |> Map.put(:block_txn_index, block_txn_index)
-          |> Map.put(:transactions, transactions)
-          |> Map.put(:blocks, blocks)
-          
         # EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
     end
       

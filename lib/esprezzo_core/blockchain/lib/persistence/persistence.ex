@@ -73,14 +73,30 @@ defmodule EsprezzoCore.Blockchain.Persistence do
   end
 
   def _persist_block(block_map) do
-    block_map = sanitize(block_map)
-    cs = Block.changeset(%Block{}, block_map)
-    Repo.insert(cs)
+    case Block.find(block_map.header_hash) do
+      nil -> 
+        Logger.warn "block not found.. storing"
+        block_map = sanitize(block_map)
+        cs = Block.changeset(%Block{}, block_map)
+        Repo.insert(cs)
+      block ->
+        Logger.warn "block header already exists in storage"
+        {:ok, block}
+    end
+   
   end
 
   def persist_txn(txn_map) do
-    Transaction.changeset(%Transaction{}, txn_map)
-    |> Repo.insert()
+    IEx.pry
+    case Transaction.find(txn_map.txid) do
+      nil -> 
+        Logger.warn "TXN not found.. storing"
+        Transaction.changeset(%Transaction{}, txn_map)
+        |> Repo.insert()
+      txn -> 
+        Logger.warn "TXN already exists in storage"
+    end
+
   end
 
   def best_block() do

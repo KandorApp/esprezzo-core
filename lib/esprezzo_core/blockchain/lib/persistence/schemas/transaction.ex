@@ -28,7 +28,15 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Transaction do
       |> where([b], fragment("block_hash = ?", ^hash))
       |> order_by([b], desc: b.timestamp)
       |> Repo.all
-    end
+  end
+
+  def find(hash) do
+    __MODULE__
+      |> where([b], fragment("txid = ?", ^hash))
+      |> order_by([b], desc: b.timestamp)
+      |> Repo.one
+  end
+
 end
 
 defmodule Output do
