@@ -104,13 +104,23 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     {:reply, res, state}
   end
 
-  # def validate_blocks() do
-  #   GenServer.call(__MODULE__, :validate_blocks, :infinity)
-  # end
-  # def handle_call({:validate_blocks, hash}, _from, state) do
-  #   BlockValidator.validate_blocks(state.blocks, state.block_index)
-  #   {:reply, state, state}
-  # end
+  @doc """
+    EsprezzoCore.Blockchain.CoreMeta.validate_blocks()
+  """
+  def validate_blocks() do
+    GenServer.call(__MODULE__, :validate_blocks, :infinity)
+  end
+  def handle_call(:validate_blocks, _from, state) do
+    genesis_hash = state.block_index
+    |> List.first()
+
+  blocks = state.blockchain
+    |> Map.delete(genesis_hash) 
+    |> Map.values()
+    
+    BlockValidator.validate_chain(blocks, state.block_index)
+    {:reply, state, state}
+  end
 
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(index)
