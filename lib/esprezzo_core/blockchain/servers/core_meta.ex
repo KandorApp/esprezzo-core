@@ -203,6 +203,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     Logger.warn "Block Map Height: #{Enum.count(state.blocks)}"
     case Enum.member?(state.block_index, block.header_hash) do
       true -> 
+        :timer.sleep(1000)
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP"
       false -> 
         case Persistence.persist_block(block) do
@@ -247,11 +248,10 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
             Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
             {:error, changeset}
         end
-        
-        # EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
+        {:reply, state, state}
+
     end
       
-    {:reply, state, state}
   end
 
 
