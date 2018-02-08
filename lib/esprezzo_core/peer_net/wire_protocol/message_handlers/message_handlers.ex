@@ -13,6 +13,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
   alias EsprezzoCore.PeerNet.WireProtocol.StatusHandler
   alias EsprezzoCore.PeerNet.WireProtocol.RequestBlocksHandler
+  alias EsprezzoCore.BlockChain.Settlement.BlockValidator 
+  alias EsprezzoCore.Blockchain.CoreMeta
 
   def process(message, socket, transport, remote_addr) do
 
@@ -62,13 +64,17 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           "ARE WE VALIDATING THIS?"
         end)
         block = command_struct.blockData
-        # Add block to chain
-        res = EsprezzoCore.Blockchain.CoreMeta.push_block(block)
-        Logger.warn "New Block Added // Requesting next block"
-        #:timer.sleep(33)
-        {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
-        
-
+        block_idx = CoreMeta.get_block_index()
+        case BlockValidator.is_valid?(block, block_idx) do
+          true -> 
+            EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+            Logger.warn "New Block Added // Requesting next block"
+            {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+          false ->
+            Logger.warn "New Block FAILED VALIDATION // Requesting next block"
+            {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+        end
+     
       #  Handle Request for blocks at starting index  
       #  Should return block by index by returning command directly to calling peer process  
       "REQUEST_BLOCKS" ->
