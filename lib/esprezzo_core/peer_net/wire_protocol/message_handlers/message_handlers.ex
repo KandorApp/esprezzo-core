@@ -29,7 +29,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
             :noreply
           false ->
             Logger.warn(fn ->
-              "Received STATUS from  #{remote_addr} // HEIGHT (Remote/Local) #{command_struct.block_height}/#{Blockchain.current_height()} // #{inspect(message)}"
+              "Received STATUS from  #{remote_addr} // HEIGHT (Remote/Local) #{command_struct.block_height}/#{Blockchain.current_height()}"
             end)    
             StatusHandler.process(command_struct)
         end
