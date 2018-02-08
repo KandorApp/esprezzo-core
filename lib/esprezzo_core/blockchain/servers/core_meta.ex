@@ -203,8 +203,8 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     Logger.warn "Block Map Height: #{Enum.count(state.blocks)}"
     case Enum.member?(state.block_index, block.header_hash) do
       true -> 
-        :timer.sleep(1000)
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP"
+        :timer.sleep(1000)
       false -> 
         case Persistence.persist_block(block) do
           {:ok, block} -> 
