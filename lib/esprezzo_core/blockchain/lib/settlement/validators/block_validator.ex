@@ -12,6 +12,7 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     case Enum.count(blocks) > 0 do
       true ->
         [genesis | blocks] = blocks
+        IEx.pry
         [block | blocks] = blocks
         case is_valid?(block, block_index) do
           true -> 
@@ -24,7 +25,6 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
         end
       false -> true
     end
-
   end 
   @doc """
   Validate a Settlement Ledger block 
