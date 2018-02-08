@@ -87,7 +87,6 @@ defmodule EsprezzoCore.Blockchain.Persistence do
   end
 
   def persist_txn(txn_map) do
-    IEx.pry
     case Transaction.find(txn_map.txid) do
       nil -> 
         Logger.warn "TXN not found.. storing"
