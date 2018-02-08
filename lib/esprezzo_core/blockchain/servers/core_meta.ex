@@ -162,14 +162,6 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     {:reply, top_block, state}
   end
 
-  @doc """
-    EsprezzoCore.Blockchain.CoreMeta.status
-  """
-  def handle_info(:display_status, state) do
-    Logger.warn "Local Block Height: #{Enum.count(state.block_index)} // BlockChain Map Height: #{Enum.count(state.blocks)}"
-    Logger.warn "Local Txn Count: #{Enum.count(state.transactions)}"
-    {:noreply, state}
-  end
 
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.height
@@ -270,6 +262,15 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     first_idx = state.block_index |> List.first
     genesis_block = Map.get(state.blocks, first_idx)
     {:reply, genesis_block, state}
+  end
+
+  @doc """
+  """
+  def handle_info(:display_status, state) do
+    Logger.warn "Local Block Height: #{Enum.count(state.block_index)} // BlockChain Map Height: #{Enum.count(state.blocks)}"
+    Logger.warn "Local Txn Count: #{Enum.count(state.transactions)}"
+    schedule_status_display()
+    {:noreply, state}
   end
 
   defp schedule_status_display() do
