@@ -243,7 +243,6 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
                 end
               end)
             
-              
             state = state
               |> Map.put(:block_index, block_index)
               |> Map.put(:txn_index, txn_index)

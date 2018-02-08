@@ -31,9 +31,9 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     Logger.warn "Persisting block: #{block.header_hash}"
     txns = block.txns
     txn_data = Enum.map(txns, fn t ->
-      IEx.pry
-      txn = Map.from_struct(t) 
-      txn = Map.put(txn, :block_hash, block.header_hash)
+      #IEx.pry
+      #txn = Map.from_struct(t) 
+      txn = Map.put(t, :block_hash, block.header_hash)
       case persist_txn(txn) do
         {:ok, txn} -> 
           sanitize(txn)
