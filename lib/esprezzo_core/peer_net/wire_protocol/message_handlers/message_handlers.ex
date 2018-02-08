@@ -73,9 +73,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           false ->
             Logger.warn "New Block FAILED VALIDATION // Requesting next block"
             :timer.sleep(666)
+            #{:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height() + 1)}
             :noreply
-            {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height() + 1)}
-            
         end
      
       #  Handle Request for blocks at starting index  

@@ -205,6 +205,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
       true -> 
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP // Pausing..."
         :timer.sleep(1000)
+        {:noreply, state}
       false -> 
         case Persistence.persist_block(block) do
           {:ok, block} -> 
@@ -248,7 +249,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
             Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
             {:error, changeset}
         end
-        {:reply, state, state}
+        {:reply, :ok, state}
 
     end
       
