@@ -64,6 +64,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   
     BlockValidator.validate_chain(blocks, block_index)
     Logger.warn "Chain State Loaded"
+    schedule_status_display()
     {:ok, %{
       :block_index => block_index,
       :txn_index => txn_index,
@@ -164,14 +165,10 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.status
   """
-  def status do
-    GenServer.call(__MODULE__, :status, :infinity)
-  end
-  def handle_call(:status, _from, state) do
-    Logger.warn "Block Index Height: #{Enum.count(state.block_index)}"
-    Logger.warn "Block Map Height: #{Enum.count(state.blocks)}"
-    Logger.warn "Txn Count: #{Enum.count(state.transactions)}"
-    {:reply, nil, state}
+  def handle_info(:display_status, state) do
+    Logger.warn "Local Block Height: #{Enum.count(state.block_index)} // BlockChain Map Height: #{Enum.count(state.blocks)}"
+    Logger.warn "Local Txn Count: #{Enum.count(state.transactions)}"
+    {:noreply, state}
   end
 
   @doc """
@@ -274,5 +271,9 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     genesis_block = Map.get(state.blocks, first_idx)
     {:reply, genesis_block, state}
   end
+
+  defp schedule_status_display() do
+    Process.send_after(self(), :display_status, 5000)
+  end  
 
 end
