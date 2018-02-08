@@ -32,7 +32,7 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     txns = block.txns
     txn_data = Enum.map(txns, fn t ->
       #IEx.pry
-      #txn = Map.from_struct(t) 
+      #txn = Map.from_struct(t)
       txn = Map.put(t, :block_hash, block.header_hash)
       case persist_txn(txn) do
         {:ok, txn} -> 
@@ -78,6 +78,14 @@ defmodule EsprezzoCore.Blockchain.Persistence do
       nil -> 
         Logger.warn "block not found.. storing"
         block_map = sanitize(block_map)
+        header = case is_struct?(block_map.header) do
+          true -> 
+            Map.from_struct(block_map.header)
+          false ->
+            block_map.header
+        end
+        block_map = Map.put(block_map, :header, header)
+
         cs = Block.changeset(%Block{}, block_map)
         Repo.insert(cs)
       block ->
