@@ -52,7 +52,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     block_txn_index = ChainBuilder.build_transactions_by_block_index(transactions)
     transaction_map = ChainBuilder.build_transaction_map(transactions)
     blockchain = ChainBuilder.build_blockchain(blocks, transaction_map, block_txn_index)
-    BlockValidator.validate_blocks(Map.values(blockchain))
+    BlockValidator.validate_chain(Map.values(blockchain), block_index)
     Logger.warn "Stored Block Height: #{Enum.count(block_index)}"
     {:ok, %{
       :block_index => block_index,
@@ -96,13 +96,13 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     {:reply, res, state}
   end
 
-  def validate_blocks() do
-    GenServer.call(__MODULE__, :validate_blocks, :infinity)
-  end
-  def handle_call({:validate_blocks, hash}, _from, state) do
-    BlockValidator.validate_blocks(state.blocks)
-    {:reply, state, state}
-  end
+  # def validate_blocks() do
+  #   GenServer.call(__MODULE__, :validate_blocks, :infinity)
+  # end
+  # def handle_call({:validate_blocks, hash}, _from, state) do
+  #   BlockValidator.validate_blocks(state.blocks, state.block_index)
+  #   {:reply, state, state}
+  # end
 
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(index)

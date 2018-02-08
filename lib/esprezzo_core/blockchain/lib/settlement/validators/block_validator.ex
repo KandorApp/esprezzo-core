@@ -7,17 +7,17 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
   alias EsprezzoCore.BlockChain.Settlment.Structs.Block
   alias EsprezzoCore.BlockChain.Settlement.Structs.BlockHeader
 
-  @spec validate_blocks(List.t()) :: Boolean.t
-  def validate_blocks(blocks) do
-    
+  @spec validate_chain(List.t(), List.t(), Integer.t() | nil) :: Boolean.t
+  def validate_chain(blocks, block_index, cur_block \\ 0) do
     case Enum.count(blocks) > 0 do
       true ->
+        [genesis | blocks] = blocks
         [block | blocks] = blocks
-        case is_valid?(block) do
+        case is_valid?(block, block_index) do
           true -> 
-            #IEx.pry
-            Logger.warn "Block is valid"
-            validate_blocks(blocks)
+            cur_block = cur_block + 1
+            Logger.warn "Block #{cur_block} is valid"
+            validate_chain(blocks, block_index, cur_block)
           false -> 
             Logger.warn "Invalid Block found"
             false
@@ -31,12 +31,24 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
   Current Conditions
   EsprezzoCore.BlockChain.Settlement.BlockValidator.validate(block)
   true <- parent_exists?(block.header.previous_hash),
+  true <- block_sequence_intact()
   """
   @spec is_valid?(Block) :: Boolean
   def is_valid?(block) do
     with delta_hash <- hash_header(block.header),
       true <- difficulty_is_valid?(block.header, delta_hash),
       true <- hash_is_valid?(block, delta_hash),
+      do: true
+  end
+  @doc """
+    This one checks against an existing dataset
+  """
+  @spec is_valid?(Block.t(), List.t(Map.t)) :: Boolean
+  def is_valid?(block, block_index) do
+    with delta_hash <- hash_header(block.header),
+      true <- difficulty_is_valid?(block.header, delta_hash),
+      true <- hash_is_valid?(block, delta_hash),
+      true <- parent_index_exists?(block.header.previous_hash, block_index),
       do: true
   end
 
@@ -73,11 +85,12 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     end
   end
 
-  @spec parent_exists?(String.t()) :: Boolean.t()
-  def parent_exists?(hash) do
-    case CoreMeta.block_exists?(hash) do
+  @spec parent_index_exists?(String.t(), List.t()) :: Boolean.t()
+  def parent_index_exists?(hash, block_index) do
+    #IEx.pry
+    case Enum.member?(block_index, hash) do
       false -> 
-        Logger.warn "Parent Block Does Not Exists"
+        Logger.warn "Parent Block Does Not Exist"
         false
       true ->
         Logger.warn "Parent Block Exists"

@@ -35,7 +35,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
     genesis_block = genesis_block_template()
     |> sanitize()
 
-    case BlockValidator.is_valid?(genesis_block) do
+    case BlockValidator.is_independently_valid?(genesis_block) do
       true ->
         case Persistence.persist_block(genesis_block) do
           {:ok, block} -> 
