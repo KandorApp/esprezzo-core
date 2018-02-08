@@ -5,6 +5,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   use GenServer
 
   alias EsprezzoCore.Blockchain
+  alias  EsprezzoCore.PeerNet.PeerManager
   alias EsprezzoCore.Blockchain.Persistence
   alias EsprezzoCore.Blockchain.ChainBuilder
   alias EsprezzoCore.BlockChain.Settlement.BlockValidator
@@ -250,7 +251,9 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
               |> Map.put(:transactions, transactions)
               |> Map.put(:blocks, blocks)
           
-          {:error, changeset} ->
+            PeerManager.notify_peers_with_new_block(block)
+          
+            {:error, changeset} ->
             Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
             {:error, changeset}
         end

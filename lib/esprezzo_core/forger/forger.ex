@@ -39,11 +39,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
             
             # Add to local chain
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
-            # Notify so they can ask
-            # I guess it might make more sense to push this without the status chatter?
-            #:timer.sleep(33)
-            #EsprezzoCore.PeerNet.PeerManager.notify_peers_with_status()
-            EsprezzoCore.PeerNet.PeerManager.notify_peers_with_new_block(block)
+           
           {:error, _} ->
             Logger.error "Could not forge candidate block"
         end
