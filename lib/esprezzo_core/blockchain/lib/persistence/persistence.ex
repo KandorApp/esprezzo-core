@@ -95,6 +95,7 @@ defmodule EsprezzoCore.Blockchain.Persistence do
         |> Repo.insert()
       txn -> 
         Logger.warn "TXN already exists in storage"
+        {:ok, txn}
     end
 
   end
