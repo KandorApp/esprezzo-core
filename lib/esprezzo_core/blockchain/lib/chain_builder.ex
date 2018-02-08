@@ -6,7 +6,7 @@ defmodule EsprezzoCore.Blockchain.ChainBuilder do
   @spec build_blockchain(List.t, Map.t, Map.t) :: List.t
   def build_blockchain(blocks, transactions, block_txn_index) do
     Enum.reduce(blocks, %{}, fn (x, acc) -> 
-      IEx.pry
+      # IEx.pry
       txns = Map.take(transactions, Map.get(block_txn_index, x.header_hash))
       x = x
       |> Map.put(:txns, Map.values(txns))
