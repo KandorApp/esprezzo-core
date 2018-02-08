@@ -5,7 +5,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   use GenServer
 
   alias EsprezzoCore.Blockchain
-  alias  EsprezzoCore.PeerNet.PeerManager
+  alias EsprezzoCore.PeerNet.PeerManager
   alias EsprezzoCore.Blockchain.Persistence
   alias EsprezzoCore.Blockchain.ChainBuilder
   alias EsprezzoCore.BlockChain.Settlement.BlockValidator

@@ -6,7 +6,8 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
   alias EsprezzoCore.Blockchain.Settlment.Transactions
   alias EsprezzoCore.Blockchain.Persistence
   alias EsprezzoCore.Blockchain.Forger
-
+  alias EsprezzoCore.Blockchain.CoreMeta
+  
   @doc """
     EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis.regenerate()
   """
@@ -32,6 +33,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
   """
   @spec reinitialize() :: {:ok, any} | {:error, any}
   def reinitialize() do
+    CoreMeta.refresh()
     Persistence.clear_all()
     genesis_block = genesis_block_template()
     |> sanitize()

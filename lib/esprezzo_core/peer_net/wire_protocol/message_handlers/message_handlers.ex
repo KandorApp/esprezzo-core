@@ -68,6 +68,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
           true -> 
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
             Logger.warn "New VALID Block Added // Requesting next block"
+            :timer.sleep(33)
             {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
           false ->
             Logger.warn "New Block FAILED VALIDATION // Requesting next block"
@@ -78,7 +79,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
       #  Should return block by index by returning command directly to calling peer process  
       "REQUEST_BLOCKS" ->
         Logger.warn(fn ->
-          "Received BLOCK_REQUEST for HEIGHT: #{command_struct.index} // from #{inspect(socket)} // #{remote_addr}"
+          "Received REQUEST_BLOCKS for HEIGHT: #{command_struct.index} // from #{remote_addr}"
         end)
         RequestBlocksHandler.process(command_struct)
 
