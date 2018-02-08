@@ -8,9 +8,9 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
   alias EsprezzoCore.Forger.Templates
   alias EsprezzoCore.Blockchain.Persistence
   # alias EsprezzoCore.Blockchain.Settlement.CoreChain
+  alias EsprezzoCore.BlockChain.Settlement.BlockValidator
   alias EsprezzoCore.BlockChain.Settlement.Structs.{BlockHeader}
-  # alias EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis
-  
+  alias EsprezzoCore.Blockchain.CoreMeta
           @target_diff 1000000000000000000000000000000000000000000000000000000000000000000000000
   @reduced_target_diff 100000000000000000000000000000000000000000000000000000000000000000000000000
 
@@ -20,18 +20,23 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
   @spec forge() :: :ok | :error
   def forge() do
     block_candidate = forge_block_candidate(Templates.block_template())
-    case Persistence.persist_block(block_candidate) do
-      {:ok, block} -> 
-        Logger.warn "Storing Block Candidate for height: #{Blockchain.current_height}"
-        
-        # update memchain
-        # It might make more sense to
-        # return this and not notify from such a deep library
-        {:ok, block}
-      {:error, changeset} ->
-        Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
-        {:error, changeset}
+    # should this be available on alias Blockchain
+    block_index = CoreMeta.get_block_index()
+
+    case BlockValidator.is_valid?(block_candidate, block_index) do
+      true -> 
+        case Persistence.persist_block(block_candidate) do
+          {:ok, block} -> 
+            Logger.warn "Storing Block Candidate for height: #{Blockchain.current_height}"
+            {:ok, block}
+          {:error, changeset} ->
+            Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
+            {:error, changeset}
+        end
+      false -> 
+        {:error, "block_invalid"}
     end
+   
   end
 
   @doc """

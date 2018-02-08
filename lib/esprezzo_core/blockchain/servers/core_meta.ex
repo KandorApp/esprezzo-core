@@ -83,6 +83,17 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   end
 
   @doc """
+    EsprezzoCore.Blockchain.CoreMeta.get_block_index()
+  """
+  def get_block_index do
+    GenServer.call(__MODULE__, :get_block_index, :infinity)
+  end
+  def handle_call(:get_block_index, _from, state) do
+    {:reply, state.block_index, state}
+  end
+
+
+  @doc """
     EsprezzoCore.Blockchain.CoreMeta.refresh
   """
   def refresh do
@@ -114,7 +125,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     genesis_hash = state.block_index
     |> List.first()
 
-  blocks = state.blockchain
+  blocks = state.blocks
     |> Map.delete(genesis_hash) 
     |> Map.values()
     

@@ -35,6 +35,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
         end)
         case EsprezzoCore.Blockchain.Forger.Hashery.forge() do
           {:ok, block} ->
+            
             # Add to local chain
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
             # Notify so they can ask
