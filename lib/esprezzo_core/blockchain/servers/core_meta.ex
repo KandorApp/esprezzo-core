@@ -203,6 +203,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   @doc """
     EsprezzoCore.Blockchain.CoreMeta.push_block
     Only way to add a block to the chain and to persistent storage
+    DO NOT HANDLE VALIDATION HERE
   """
   def push_block(block) do
     # GenServer.call(__MODULE__, :status, :infinity)

@@ -25,14 +25,6 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
 
     case BlockValidator.is_valid?(block_candidate, block_index) do
       true -> 
-        # case Persistence.persist_block(block_candidate) do
-        #   {:ok, block} -> 
-        #     Logger.warn "Storing Block Candidate for height: #{Blockchain.current_height}"
-        #     {:ok, block}
-        #   {:error, changeset} ->
-        #     Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
-        #     {:error, changeset}
-        # end
         {:ok, block_candidate}
       false -> 
         {:error, "block_invalid"}

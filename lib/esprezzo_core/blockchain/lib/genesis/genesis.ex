@@ -16,6 +16,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
     genesis_block = Forger.Hashery.forge_genesis_block(genesis_block_template())
     case Persistence.persist_block(genesis_block) do
       {:ok, block} -> 
+        Logger.warn "Pushing Genesis Block To MemChain"
         EsprezzoCore.Blockchain.CoreMeta.push_block(block)
         {:ok, block}
       {:error, error} -> {:error, error}

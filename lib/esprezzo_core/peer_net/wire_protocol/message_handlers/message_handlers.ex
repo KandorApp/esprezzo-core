@@ -61,14 +61,13 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
       "NEW_BLOCK" ->
         Logger.warn(fn ->
           "Received NEW_BLOCK // from #{inspect(socket)} // #{remote_addr}"
-          "ARE WE VALIDATING THIS?"
         end)
         block = command_struct.blockData
         block_idx = CoreMeta.get_block_index()
         case BlockValidator.is_valid?(block, block_idx) do
           true -> 
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
-            Logger.warn "New Block Added // Requesting next block"
+            Logger.warn "New VALID Block Added // Requesting next block"
             {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
           false ->
             Logger.warn "New Block FAILED VALIDATION // Requesting next block"
@@ -80,7 +79,6 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
       "REQUEST_BLOCKS" ->
         Logger.warn(fn ->
           "Received BLOCK_REQUEST for HEIGHT: #{command_struct.index} // from #{inspect(socket)} // #{remote_addr}"
-          "ARE WE VALIDATING THIS?"
         end)
         RequestBlocksHandler.process(command_struct)
 
