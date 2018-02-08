@@ -26,8 +26,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
       |> Map.put(:node_uuid, node_uuid)
       |> Map.put(:pid, self())
 
-      schedule_status_notification(state.remote_addr)
       schedule_hello()
+      schedule_status_notification(state.remote_addr)
     {:ok, state}
   end
 
@@ -169,7 +169,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   defp schedule_status_notification(remote_addr) do
-    Process.send_after(self(), :send_status, 10000)
+    Process.send_after(self(), :send_status, 1000)
   end
 
   defp sanitize(map) do

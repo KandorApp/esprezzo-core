@@ -249,7 +249,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
             {:error, changeset}
         end
       
-      {:reply, :ok, state}
+        {:reply, :ok, state}
 
     end
       
