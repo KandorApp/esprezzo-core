@@ -64,7 +64,9 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   
     BlockValidator.validate_chain(blocks, block_index)
     Logger.warn "Chain State Loaded"
+    
     schedule_status_display()
+    
     {:ok, %{
       :block_index => block_index,
       :txn_index => txn_index,
@@ -151,6 +153,19 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
 
 
   @doc """
+    EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(index)
+  """
+  def get_n_blocks(start_index, count) do
+    GenServer.call(__MODULE__, {:get_n_blocks, start_index, count}, :infinity)
+  end
+  def handle_call({:get_n_blocks, start_index, count}, _from, state) do
+    IEx.pry
+    #hash_key = state.block_index |> Enum.at(idx)
+    #block = Map.get(state.blocks, hash_key)
+    {:reply, state, state}
+  end
+
+  @doc """
     EsprezzoCore.Blockchain.CoreMeta.best_block
   """
   def best_block do
@@ -204,7 +219,8 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     case Enum.member?(state.block_index, block.header_hash) do
       true -> 
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP // Pausing..."
-        {:reply, :ok, state}
+        #{:reply, :ok, state}
+        {:noreply, state}
       false -> 
         case Persistence.persist_block(block) do
           {:ok, block} -> 

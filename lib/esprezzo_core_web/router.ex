@@ -7,7 +7,8 @@ defmodule EsprezzoCoreWeb.Router do
 
   scope "/", EsprezzoCoreWeb do
     pipe_through :api
-    get  "/blocks", BlockController, :all
+    get  "/blocks", BlockController, :index
+    get  "/blocks/:hash", BlockController, :show
     get  "/transactions", BlockController, :txns
     get  "/status", StatusController, :index
     get  "/ping", StatusController, :ping

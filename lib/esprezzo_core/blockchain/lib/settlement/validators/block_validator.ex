@@ -91,7 +91,6 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
 
   @spec parent_index_exists?(String.t(), List.t()) :: Boolean.t()
   def parent_index_exists?(hash, block_index) do
-    #IEx.pry
     case Enum.member?(block_index, hash) do
       false -> 
         Logger.warn "Parent Block Does Not Exist"

@@ -41,5 +41,9 @@ defmodule EsprezzoCore.Blockchain do
   def block_exists?(hash) do
     
   end
+
+  def get_blocks(start, count) do
+    CoreMeta.get_n_blocks(start, count)
+  end
   
 end

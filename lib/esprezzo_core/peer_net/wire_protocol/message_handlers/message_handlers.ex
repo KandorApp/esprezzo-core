@@ -29,7 +29,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
             :noreply
           false ->
             Logger.warn(fn ->
-              "Received STATUS from  #{remote_addr} // HEIGHT (Remote/Local) #{command_struct.block_height}/#{Blockchain.current_height()}"
+              "Received STATUS from #{remote_addr} // HEIGHT (Remote/Local) #{command_struct.block_height}/#{Blockchain.current_height()}"
             end)    
             StatusHandler.process(command_struct)
         end
@@ -72,7 +72,9 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
             {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
           false ->
             Logger.warn "New Block FAILED VALIDATION // Requesting next block"
-            {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+            :timer.sleep(1000)
+            #{:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+            :noreply
         end
      
       #  Handle Request for blocks at starting index  
