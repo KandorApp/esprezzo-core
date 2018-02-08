@@ -42,7 +42,7 @@ defmodule EsprezzoCore.Blockchain.Persistence do
       end
     end)
     block_data = Map.delete(block, :txns)
-    block_data = Map.put(block_data, :header, Map.from_struct(block_data.header))
+    block_data = Map.put(block_data, :header, block_data.header)
     case _persist_block(block_data) do
       {:ok, block} ->
         block = Map.put(block, :txns, txn_data)
