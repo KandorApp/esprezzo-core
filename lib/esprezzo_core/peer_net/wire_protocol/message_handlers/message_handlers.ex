@@ -66,7 +66,6 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         block_idx = CoreMeta.get_block_index()
         case BlockValidator.is_valid?(block, block_idx) do
           true -> 
-            IEx.pry
             Logger.warn "Adding New VALID Block // Pushing to Chain"
             EsprezzoCore.Blockchain.CoreMeta.push_block(block)
             Logger.warn "New VALID Block Added // Requesting next block"
