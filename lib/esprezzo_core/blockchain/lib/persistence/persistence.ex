@@ -91,6 +91,12 @@ defmodule EsprezzoCore.Blockchain.Persistence do
     case Transaction.find(txn_map.txid) do
       nil -> 
         Logger.warn "TXN not found.. storing"
+        txn_map = case is_struct?(txn_map) do
+          true -> 
+            Map.from_struct(txn_map)
+          false ->
+            txn_map
+        end
         Transaction.changeset(%Transaction{}, txn_map)
         |> Repo.insert()
       txn -> 
@@ -98,6 +104,10 @@ defmodule EsprezzoCore.Blockchain.Persistence do
         {:ok, txn}
     end
 
+  end
+
+  def is_struct?(map) do
+    Map.has_key?(map, :__struct__)
   end
 
   def best_block() do
