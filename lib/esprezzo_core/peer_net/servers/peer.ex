@@ -169,7 +169,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
   end
 
   defp schedule_status_notification(remote_addr) do
-    Process.send_after(self(), :send_status, 1000)
+    Process.send_after(self(), :send_status, 3000)
   end
 
   defp sanitize(map) do
