@@ -21,7 +21,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
     case command_struct.command do
       "STATUS" ->
         Logger.warn(fn ->
-          "Received STATUS from #{inspect(message)}"
+          "Received STATUS from  #{remote_addr} // HEIGHT (Remote/Local) #{command_struct.block_height}/#{Blockchain.current_height()} // #{inspect(message)}"
         end)
        
         case PeerNet.local_node_uuid() == command_struct.node_uuid do

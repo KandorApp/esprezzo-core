@@ -11,10 +11,6 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.StatusHandler do
   Does the sender have a higher block count that I do?
   """
   def process(command) do
-    inspect(command)
-    Logger.warn("STATUS RECEIVED FROM: ")
-    Logger.warn("STATUS RECEIVED // LOCAL HEIGHT: #{Blockchain.current_height()}")
-    Logger.warn("STATUS RECEIVED // REMOTE HEIGHT: #{command.block_height}")
     case command.block_height > Blockchain.current_height() do
       true -> 
         # ask for blocks

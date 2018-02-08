@@ -28,7 +28,8 @@ defmodule EsprezzoCore.Blockchain.Forger do
   def handle_info(:forge_block, state) do
     case state.pause do
       true ->
-        Logger.warn "Forging Paused..."
+        # Logger.warn "Forging Paused..."
+        :ok
       false ->
         Logger.warn(fn ->
           "Forging New Block"
@@ -52,7 +53,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
   end
 
   defp schedule_forge(state) do
-    Process.send_after(self(), :forge_block, 7000)
+    Process.send_after(self(), :forge_block, 2000)
   end
  
   @doc """

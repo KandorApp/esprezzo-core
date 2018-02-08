@@ -62,7 +62,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
       |> Map.values()
   
     BlockValidator.validate_chain(blocks, block_index)
-    Logger.warn "Stored Block Height: #{Enum.count(block_index)}"
+    Logger.warn "Chain State Loaded"
     {:ok, %{
       :block_index => block_index,
       :txn_index => txn_index,
