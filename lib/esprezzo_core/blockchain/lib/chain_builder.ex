@@ -15,7 +15,8 @@ defmodule EsprezzoCore.Blockchain.ChainBuilder do
           build_block(acc, x, transactions, block_txn_index)
         header ->
           Logger.warn header
-          block_number = Map.get(acc, header).last_block.block_number + 1
+          #block_number = Map.get(acc, header).block_number + 1
+          acc = build_block(acc, x, transactions, block_txn_index)
           IEx.pry
       end
 
@@ -67,6 +68,10 @@ defmodule EsprezzoCore.Blockchain.ChainBuilder do
 
   def build_block_index(blocks) do
     Enum.map(blocks, fn x -> x.header_hash end)
+  end
+
+  def build_block_height_index(blocks) do
+    Enum.reduce(blocks, %{}, fn (x, acc) -> Map.put(acc, x.block_number, x.header_hash) end)
   end
 
   def build_txn_index(transactions) do

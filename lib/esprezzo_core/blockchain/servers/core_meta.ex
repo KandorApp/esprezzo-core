@@ -31,16 +31,19 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   def init(opts) do
     blocks = Persistence.load_chain()
     transactions = Persistence.load_transactions()
+    
     case Enum.count(blocks) do
       cnt when cnt > 0 ->
         Logger.warn "More than zero blocks"
+        
         block = List.first(blocks)
+
         case block.header_hash == Genesis.genesis_hash do
           true -> 
             Logger.warn "Genesis Block intact"
           false -> 
             Logger.warn "Genesis Block invalid.. reloading"
-            Genesis.reinitialize()
+            IEx.pry
             blocks = Persistence.load_chain()
         end
       _ ->
@@ -48,13 +51,15 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
         Genesis.reinitialize()
         blocks = Persistence.load_chain()
     end
+    
     Logger.warn "LOADED #{Enum.count(blocks)} BLOCKS FROM STORAGE"
     block_index = ChainBuilder.build_block_index(blocks)
     txn_index = ChainBuilder.build_txn_index(transactions)
     block_txn_index = ChainBuilder.build_transactions_by_block_index(transactions)
     transaction_map = ChainBuilder.build_transaction_map(transactions)
     blockchain = ChainBuilder.build_blockchain(blocks, transaction_map, block_txn_index)
-  
+    block_height_index = ChainBuilder.build_block_height_index(Map.values(blockchain))
+    
     genesis_hash = block_index
       |> List.first()
   
@@ -72,7 +77,8 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
       :txn_index => txn_index,
       :block_txn_index => block_txn_index,
       :transactions => transaction_map,
-      :blocks => blockchain
+      :blocks => blockchain,
+      :block_height_index => block_height_index
       }
     }
   end
@@ -227,7 +233,6 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
             Logger.warn "Storing Block Candidate for height: #{Enum.count(state.block_index)}"
             Logger.warn "Adding Block #{block.header_hash}"
             block_index = state.block_index ++ [block.header_hash]
-
             txn_index = case state.txn_index  do
               [] -> [ChainBuilder.build_txn_index(block.txns)]
               nil -> [ChainBuilder.build_txn_index(block.txns)]
@@ -251,17 +256,21 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
                 end
               end)
             
+            block_height_index = Map.put(state.block_height_index, block.block_number, block) 
+
             state = state
               |> Map.put(:block_index, block_index)
               |> Map.put(:txn_index, txn_index)
               |> Map.put(:block_txn_index, block_txn_index)
               |> Map.put(:transactions, transactions)
               |> Map.put(:blocks, blocks)
-          
+              |> Map.put(:block_height_index, block_height_index)
+
             if notify do
               PeerManager.notify_peers_with_new_block(block)
             end
           {:error, changeset} ->
+            IEx.pry
             Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
             {:error, changeset}
         end

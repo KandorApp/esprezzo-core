@@ -24,16 +24,20 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
     end
   end
 
+  @doc """
+    EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis.genesis_hash()
+  """
   def genesis_hash do
     genesis_block_template()
     |> Map.get(:header_hash)
   end
+
+
   @doc """
     EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis.reinitialize()
   """
   @spec reinitialize() :: {:ok, any} | {:error, any}
   def reinitialize() do
-    CoreMeta.refresh()
     Persistence.clear_all()
     genesis_block = genesis_block_template()
     |> sanitize()
@@ -64,6 +68,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
     %Block{
       header_hash: "00001b685354953b0ccadb721f858834fdd208888fdf358598da0e8aa8a70b20",
       timestamp: 1517188208,
+      block_number: 0,
       header: %BlockHeader{
         version: 0,
         previous_hash: "0x",

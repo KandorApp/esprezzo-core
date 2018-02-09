@@ -5,6 +5,7 @@ defmodule EsprezzoCore.Repo.Migrations.CreateLedgerBlocks do
     create table(:ledger_blocks) do
 
       add :header, :map
+      add :block_number, :integer
       add :timestamp, :integer
       add :header_hash, :string
       add :meta, :string

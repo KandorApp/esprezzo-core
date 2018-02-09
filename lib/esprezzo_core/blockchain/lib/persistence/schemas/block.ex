@@ -1,7 +1,7 @@
 defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Block do
   use Ecto.Schema
   use EsprezzoCore.Blockchain.Persistence.QueryMacros
-
+  require IEx
   import Ecto.Changeset
   import Ecto.Query
   
@@ -12,14 +12,15 @@ defmodule EsprezzoCore.Blockchain.Persistence.Schemas.Block do
     field :header_hash, :string, null: false
     field :timestamp, :integer, null: false
     field :meta, :string
+    field :block_number, :integer
   end
 
   @doc false
   def changeset(block, attrs) do
     block
-    |> cast(attrs, [:timestamp, :header_hash, :meta])
+    |> cast(attrs, [:timestamp, :header_hash, :meta, :block_number])
     |> Ecto.Changeset.put_embed(:header, attrs.header)
-    |> validate_required([:timestamp, :header_hash])
+    |> validate_required([:timestamp, :header_hash, :block_number])
   end
 
   @doc false

@@ -10,13 +10,14 @@ defmodule EsprezzoCore.Forger.Templates do
     Create template to forge new block
   """
   def block_template do
-    height = Blockchain.current_height() + 1
     best_block = Blockchain.best_block()
-    Logger.warn "Forging block for height: #{height}"
+    block_number = best_block.block_number + 1
+    Logger.warn "Forging block for height: #{block_number}"
     gen_timestamp = :os.system_time(:seconds)
     %Block{
       txns: [],
       timestamp: gen_timestamp,
+      block_number: block_number,
       header: %BlockHeader{
         version: 0,
         previous_hash: best_block.header_hash,
