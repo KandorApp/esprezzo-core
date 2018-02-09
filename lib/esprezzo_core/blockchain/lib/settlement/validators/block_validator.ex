@@ -7,16 +7,16 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
   alias EsprezzoCore.BlockChain.Settlment.Structs.Block
   alias EsprezzoCore.BlockChain.Settlement.Structs.BlockHeader
 
-  @spec validate_chain(List.t(), List.t(), Integer.t() | nil) :: Boolean.t
-  def validate_chain(blocks, block_index, cur_block \\ 0) do
+  @spec validate_chain(List.t(), Map.t(), Integer.t() | nil) :: Boolean.t
+  def validate_chain(blocks, block_height_index, cur_block \\ 0) do
     case Enum.count(blocks) > 0 do
       true ->
         [block | blocks] = blocks
-        case is_valid?(block, block_index) do
+        case is_valid?(block, block_height_index) do
           true -> 
             cur_block = cur_block + 1
             Logger.warn "Block #{cur_block} is valid"
-            validate_chain(blocks, block_index, cur_block)
+            validate_chain(blocks, block_height_index, cur_block)
           false -> 
             Logger.warn "Invalid Block found"
             false
@@ -42,7 +42,7 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     This one checks against an existing dataset
   """
   @spec is_valid?(Block.t(), List.t(Map.t)) :: Boolean
-  def is_valid?(block, block_index) do
+  def is_valid?(block, block_height_index) do
     header = case is_struct?(block.header) do
       false ->
         struct(BlockHeader, block.header)
@@ -52,10 +52,25 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     with delta_hash <- hash_header(header),
       true <- difficulty_is_valid?(header, delta_hash),
       true <- hash_is_valid?(block, delta_hash),
-      true <- parent_index_exists?(block.header.previous_hash, block_index),
+      true <- parent_index_exists?(block.header.previous_hash, block_height_index),
+      true <- index_is_correct?(block, block_height_index),
       do: true
   end
 
+  @doc """
+    Checks that index is correct with parent block
+  """
+  @spec index_is_correct?(Map.t, Map.t) :: Boolean.t()
+  defp index_is_correct?(block, idx) do    
+    case block.header.previous_hash == Map.get(idx, block.block_number - 1) do
+      true -> 
+        Logger.warn "Previous Hash Matches Block Height Lookup"
+        true
+      false ->
+        Logger.warn "Previous Hash Matches Block Height Lookup"
+        false
+    end
+  end
   @doc """
     Parses and compares the onteger value of the hexadecimal 
     hash with the difficulty limit claimed my block
@@ -81,7 +96,7 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     Logger.warn "new_hash: #{delta_hash}"
     case delta_hash == block.header_hash do
       true ->
-        Logger.warn "Block hash is valid"
+        Logger.warn "Block #{block.block_number} hash is valid"
         true
       false -> 
         Logger.error "Block hash is not valid"
@@ -89,11 +104,13 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     end
   end
 
-  @spec parent_index_exists?(String.t(), List.t()) :: Boolean.t()
-  def parent_index_exists?(hash, block_index) do
-    case Enum.member?(block_index, hash) do
-      false -> 
-        Logger.warn "Parent Block Does Not Exist"
+  @spec parent_index_exists?(String.t(), Map.t()) :: Boolean.t()
+  def parent_index_exists?(hash, block_height_index) do
+    #:timer.sleep(100)
+    case Enum.member?(Map.values(block_height_index), hash) do
+      false ->
+        Logger.warn "Parent Block Does Not Exist for hash: #{hash}"
+        IEx.pry
         false
       true ->
         Logger.warn "Parent Block Exists"

@@ -67,7 +67,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
       |> Map.delete(genesis_hash) 
       |> Map.values()
   
-    BlockValidator.validate_chain(blocks, block_index)
+    BlockValidator.validate_chain(blocks, block_height_index)
     Logger.warn "Chain State Loaded"
     
     schedule_status_display()
@@ -91,6 +91,16 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   end
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
+  end
+
+  @doc """
+    EsprezzoCore.Blockchain.CoreMeta.get_block_height_index()
+  """
+  def get_block_height_index do
+    GenServer.call(__MODULE__, :get_block_height_index, :infinity)
+  end
+  def handle_call(:get_block_height_index, _from, state) do
+    {:reply, state.block_height_index, state}
   end
 
   @doc """
@@ -141,12 +151,12 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     |> Map.delete(genesis_hash) 
     |> Map.values()
     
-    BlockValidator.validate_chain(blocks, state.block_index)
+    BlockValidator.validate_chain(blocks, state.block_height_index)
     {:reply, state, state}
   end
 
   @doc """
-    EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(index)
+    EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(23)
   """
   def get_block_at_height(idx) do
     GenServer.call(__MODULE__, {:get_block_at_height, idx}, :infinity)
@@ -256,7 +266,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
                 end
               end)
             
-            block_height_index = Map.put(state.block_height_index, block.block_number, block) 
+            block_height_index = Map.put(state.block_height_index, block.block_number, block.header_hash) 
 
             state = state
               |> Map.put(:block_index, block_index)

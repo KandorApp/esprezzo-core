@@ -21,9 +21,9 @@ defmodule EsprezzoCore.Blockchain.Forger.Hashery do
   def forge() do
     block_candidate = forge_block_candidate(Templates.block_template())
     # should this be available on alias Blockchain
-    block_index = CoreMeta.get_block_index()
+    block_height_index = CoreMeta.get_block_height_index()
 
-    case BlockValidator.is_valid?(block_candidate, block_index) do
+    case BlockValidator.is_valid?(block_candidate, block_height_index) do
       true -> 
         {:ok, block_candidate}
       false -> 
