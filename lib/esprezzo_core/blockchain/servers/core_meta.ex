@@ -152,7 +152,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     GenServer.call(__MODULE__, {:get_block_at_height, idx}, :infinity)
   end
   def handle_call({:get_block_at_height, idx}, _from, state) do
-    hash_key = state.block_index |> Enum.at(idx)
+    hash_key = Map.get(state.block_height_index, idx)
     block = Map.get(state.blocks, hash_key)
     {:reply, block, state}
   end

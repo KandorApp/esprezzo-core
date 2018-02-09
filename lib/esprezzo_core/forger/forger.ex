@@ -36,7 +36,7 @@ defmodule EsprezzoCore.Blockchain.Forger do
         end)
         case EsprezzoCore.Blockchain.Forger.Hashery.forge() do
           {:ok, block} ->
-            EsprezzoCore.Blockchain.CoreMeta.push_block(block)
+            EsprezzoCore.Blockchain.CoreMeta.push_block(block, true)
           {:error, reason} ->
             Logger.error "Could not forge candidate block // #{reason}"
         end

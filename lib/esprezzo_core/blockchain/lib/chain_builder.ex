@@ -15,16 +15,15 @@ defmodule EsprezzoCore.Blockchain.ChainBuilder do
           build_block(acc, x, transactions, block_txn_index)
         header ->
           Logger.warn header
-          #block_number = Map.get(acc, header).block_number + 1
-          acc = build_block(acc, x, transactions, block_txn_index)
-          IEx.pry
+          block_number = Map.get(acc, header).block_number + 1
+          acc = build_block(acc, x, transactions, block_txn_index, block_number)
       end
 
     end)
 
   end
 
-  def build_block(acc, x, transactions, block_txn_index) do
+  def build_block(acc, x, transactions, block_txn_index, block_number \\ 0) do
     txns = case transactions do
       nil -> %{}
       t -> 
@@ -34,7 +33,6 @@ defmodule EsprezzoCore.Blockchain.ChainBuilder do
           idx -> Map.take(t, idx)
         end
     end
-
     x = x
     |> Map.put(:txns, Map.values(txns))
     |> Map.put(:header, struct(BlockHeader, Persistence.sanitize(x.header)))
