@@ -13,7 +13,8 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.RequestBlocksHandler do
   def process(command) do
     inspect(command)
     case CoreMeta.get_block_at_height(command.index) do
-      nil -> :noreply
+      nil -> 
+        {:ok, Commands.build("PING")}
       block ->
         {:ok, Commands.build("NEW_BLOCK", sanitize(block))}
     end
