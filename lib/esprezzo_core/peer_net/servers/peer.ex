@@ -27,7 +27,7 @@ defmodule EsprezzoCore.PeerNet.Peer do
       |> Map.put(:pid, self())
 
       schedule_hello()
-      schedule_status_notification(state.remote_addr)
+      #schedule_status_notification(state.remote_addr)
     {:ok, state}
   end
 

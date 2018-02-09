@@ -67,9 +67,17 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
         case BlockValidator.is_valid?(block, block_idx) do
           true -> 
             Logger.warn "Adding New VALID Block // Pushing to Chain"
-            EsprezzoCore.Blockchain.CoreMeta.push_block(block)
-            Logger.warn "New VALID Block Added // Requesting next block"
-            {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}
+            case EsprezzoCore.Blockchain.CoreMeta.push_block(block) do
+              {:error, _} -> 
+                nb = Blockchain.current_height() + 2
+                Logger.warn "New VALID BLOCK // ALREADY EXISTS // Requesting next block: #{nb}" 
+                {:ok, Commands.build("REQUEST_BLOCKS", nb)}
+              :ok ->
+                nb = Blockchain.current_height() + 1
+                Logger.warn "New VALID BLOCK ADDED // Requesting next block #{nb}"
+                {:ok, Commands.build("REQUEST_BLOCKS", nb)}
+            end
+
           false ->
             Logger.warn "New Block FAILED VALIDATION // Requesting next block"
             {:ok, Commands.build("REQUEST_BLOCKS", Blockchain.current_height())}

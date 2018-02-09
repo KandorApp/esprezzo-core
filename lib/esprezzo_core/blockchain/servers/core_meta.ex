@@ -209,18 +209,18 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     Only way to add a block to the chain and to persistent storage
     DO NOT HANDLE VALIDATION HERE
   """
-  def push_block(block) do
+  def push_block(block, notify \\ false) do
     # GenServer.call(__MODULE__, :status, :infinity)
-    GenServer.call(__MODULE__, {:push_block, block}, :infinity)
+    GenServer.call(__MODULE__, {:push_block, block, notify}, :infinity)
   end
-  def handle_call({:push_block, block}, _from, state) do
+  def handle_call({:push_block, block, notify}, _from, state) do
     Logger.warn "Block Index Height: #{Enum.count(state.block_index)}"
     Logger.warn "Block Map Height: #{Enum.count(state.blocks)}"
     case Enum.member?(state.block_index, block.header_hash) do
       true -> 
         Logger.warn "Block #{block.header_hash} already exists in index // NOOP // Pausing..."
-        #{:reply, :ok, state}
-        {:noreply, state}
+        {:reply, {:error, "exists"}, state}
+        
       false -> 
         case Persistence.persist_block(block) do
           {:ok, block} -> 
@@ -258,8 +258,9 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
               |> Map.put(:transactions, transactions)
               |> Map.put(:blocks, blocks)
           
-            PeerManager.notify_peers_with_new_block(block)
-          
+            if notify do
+              PeerManager.notify_peers_with_new_block(block)
+            end
           {:error, changeset} ->
             Logger.error "Failed To Store Block Candidate for height: #{Blockchain.current_height + 1}"
             {:error, changeset}
