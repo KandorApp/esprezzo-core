@@ -89,6 +89,10 @@ defmodule EsprezzoCore.PeerNet.Peer do
     {:stop, :normal, state}
   end
 
+  def handle_info({:error, _}, state) do
+    {:stop, :normal, state}
+  end
+
   def handle_info({:tcp_error, reason}, %{socket: socket} = state) do
     Logger.warn(fn ->
       "TCP Error: #{inspect(reason)}. socket=#{inspect(socket)}"
