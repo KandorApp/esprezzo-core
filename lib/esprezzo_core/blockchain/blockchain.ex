@@ -16,6 +16,11 @@ defmodule EsprezzoCore.Blockchain do
     CoreChain.reinitialize()
   end
 
+
+  def get_blocks(start, count) do
+    CoreMeta.get_n_blocks(start, count)
+  end
+
   @doc """
     EsprezzoCore.Blockchain.best_block()
   """
@@ -42,8 +47,5 @@ defmodule EsprezzoCore.Blockchain do
     
   end
 
-  def get_blocks(start, count) do
-    CoreMeta.get_n_blocks(start, count)
-  end
   
 end

@@ -169,16 +169,20 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
 
 
   @doc """
-    EsprezzoCore.Blockchain.CoreMeta.get_block_at_height(index)
+    EsprezzoCore.Blockchain.CoreMeta.get_n_blocks(0,5)
   """
   def get_n_blocks(start_index, count) do
     GenServer.call(__MODULE__, {:get_n_blocks, start_index, count}, :infinity)
   end
   def handle_call({:get_n_blocks, start_index, count}, _from, state) do
-    IEx.pry
-    #hash_key = state.block_index |> Enum.at(idx)
-    #block = Map.get(state.blocks, hash_key)
-    {:reply, state, state}
+    range = start_index..(start_index + (count - 1))
+    headers = Map.take(state.block_height_index, range)
+    blocks = 
+      Map.take(state.blocks, Map.values(headers))
+      |> Map.values() 
+      |> Enum.sort(&(&1.block_number <= &2.block_number))
+
+    {:reply, blocks, state}
   end
 
   @doc """
