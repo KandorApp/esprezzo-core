@@ -75,6 +75,8 @@ defmodule EsprezzoCore.PeerNet.Peer do
     case MessageHandlers.process(message, socket, transport, remote_addr) do
       :noreply ->
         {:noreply, state}
+      {:error, _} ->
+          {:noreply, state} 
       {:ok, command_message} ->
         network_message = Poison.encode!(command_message)
         inspect(command_message)

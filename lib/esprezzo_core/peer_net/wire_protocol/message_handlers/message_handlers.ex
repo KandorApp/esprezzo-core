@@ -69,7 +69,7 @@ defmodule EsprezzoCore.PeerNet.WireProtocol.MessageHandlers do
             Logger.warn "Adding New VALID Block // Pushing to Chain"
             case EsprezzoCore.Blockchain.CoreMeta.push_block(block) do
               {:error, _} -> 
-                nb = Blockchain.current_height() + 2
+                nb = Blockchain.current_height() + 1
                 Logger.warn "New VALID BLOCK // ALREADY EXISTS // Requesting next block: #{nb}" 
                 {:ok, Commands.build("REQUEST_BLOCKS", nb)}
               :ok ->
