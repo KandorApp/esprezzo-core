@@ -110,7 +110,6 @@ defmodule EsprezzoCore.BlockChain.Settlement.BlockValidator do
     case Enum.member?(Map.values(block_height_index), hash) do
       false ->
         Logger.warn "Parent Block Does Not Exist for hash: #{hash}"
-        IEx.pry
         false
       true ->
         Logger.warn "Parent Block Exists"
