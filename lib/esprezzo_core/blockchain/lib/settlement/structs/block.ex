@@ -9,7 +9,8 @@ defmodule EsprezzoCore.BlockChain.Settlement.Structs.Block do
     header_hash: String.t,
     timestamp: Integer.t,
     nonce: Integer.t,
-    meta: String.t
+    meta: String.t,
+    block_number: Integer.t
   }
 
   @derive [Poison.Encoder]
@@ -20,7 +21,8 @@ defmodule EsprezzoCore.BlockChain.Settlement.Structs.Block do
     :header_hash,
     :timestamp,
     :nonce,
-    :meta
+    :meta,
+    :block_number
   ]
   
 end

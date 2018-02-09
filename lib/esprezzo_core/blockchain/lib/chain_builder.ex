@@ -1,26 +1,46 @@
 defmodule EsprezzoCore.Blockchain.ChainBuilder do
   require IEx
+  require Logger
   alias EsprezzoCore.Blockchain.Persistence
   alias EsprezzoCore.BlockChain.Settlement.Structs.{Block, BlockHeader}
-  
+  alias EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis
+
   @spec build_blockchain(List.t, Map.t, Map.t) :: List.t
   def build_blockchain(blocks, transactions, block_txn_index) do
+
     Enum.reduce(blocks, %{}, fn (x, acc) -> 
-      txns = case transactions do
-        nil -> %{}
-        t -> 
-          tx_idx = Map.get(block_txn_index, x.header_hash)
-          case tx_idx do
-            nil -> %{}
-            idx -> Map.take(t, idx)
-          end
+      
+      case x.header.previous_hash do
+        "0x" ->
+          build_block(acc, x, transactions, block_txn_index)
+        header ->
+          Logger.warn header
+          block_number = Map.get(acc, header).last_block.block_number + 1
+          IEx.pry
       end
-      x = x
-      |> Map.put(:txns, Map.values(txns))
-      |> Map.put(:header, struct(BlockHeader, Persistence.sanitize(x.header)))
-      Map.put(acc, x.header_hash, struct(Block, Persistence.sanitize(x)))
+
     end)
+
   end
+
+  def build_block(acc, x, transactions, block_txn_index) do
+    txns = case transactions do
+      nil -> %{}
+      t -> 
+        tx_idx = Map.get(block_txn_index, x.header_hash)
+        case tx_idx do
+          nil -> %{}
+          idx -> Map.take(t, idx)
+        end
+    end
+
+    x = x
+    |> Map.put(:txns, Map.values(txns))
+    |> Map.put(:header, struct(BlockHeader, Persistence.sanitize(x.header)))
+    |> Map.put(:block_number, Enum.count(acc))
+    Map.put(acc, x.header_hash, struct(Block, Persistence.sanitize(x)))
+  end
+
 
   @spec build_transaction_map(List.t()) :: Map.t() 
   def build_transaction_map(txns) do
