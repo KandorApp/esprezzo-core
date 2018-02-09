@@ -45,6 +45,9 @@ defmodule EsprezzoCore.PeerNet.PeerTracker do
     Supervisor.start_child(__MODULE__, [[socket: socket, transport: transport, node_uuid: node_uuid]])
   end
 
+  @doc """
+    EsprezzoCore.PeerNet.PeerTracker.remove_peer(pid)
+  """
   def remove_peer(pid) do
     Supervisor.terminate_child(__MODULE__, pid)
   end

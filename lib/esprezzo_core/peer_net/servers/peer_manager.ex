@@ -30,6 +30,7 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     Logger.warn(fn ->
       "Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
     end)
+    schedule_restart_peer_connections()
     {:ok, %{
       :authorized_peers => [],
       :connected_peers => connected_peers,
@@ -86,7 +87,44 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   end
 
 
-
+  @doc """
+    iex> EsprezzoCore.PeerNet.PeerManager.restart_peer_connections()
+  """
+  def restart_peer_connections() do
+    GenServer.call(__MODULE__, :restart_peer_connections, :infinity)
+  end
+  def handle_call(:restart_peer_connections, _from, state) do
+    destroy_peer_data()
+    PeerNet.bootstrap_connections(state.node_uuid)
+    connected_peers = __MODULE__.refresh_peer_data()
+    Logger.warn(fn ->
+      "Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
+    end)
+    {:ok, %{
+      :authorized_peers => [],
+      :connected_peers => connected_peers,
+      :node_uuid => state.node_uuid
+      }
+    }
+    schedule_restart_peer_connections()
+    {:reply, state, state}
+  end
+  def handle_info(:restart_peer_connections, state) do
+    destroy_peer_data()
+    PeerNet.bootstrap_connections(state.node_uuid)
+    connected_peers = __MODULE__.refresh_peer_data()
+    Logger.warn(fn ->
+      "restart_peer_connections // Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
+    end)
+    {:ok, %{
+      :authorized_peers => [],
+      :connected_peers => connected_peers,
+      :node_uuid => state.node_uuid
+      }
+    }
+    schedule_restart_peer_connections()
+    {:noreply, state}
+  end
   @doc """
     iex> EsprezzoCore.PeerNet.PeerManager.notify_peers_with_status()
   """
@@ -110,15 +148,35 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     {:reply, state}
   end
 
+  def handle_call(:clear_peer_data, _from, state) do
+    {:reply, state, state}
+  end
   @doc """
   Collect all data from all peers to
   local state. Used on init.
+  
+  iex> EsprezzoCore.PeerNet.PeerManager.refresh_peer_data()
+
   """
   def refresh_peer_data do
     PeerTracker.list_peer_pids()
       |> Enum.map(fn pid -> 
         EsprezzoCore.PeerNet.Peer.peer_state(pid)
       end)
+  end
+
+  def destroy_peer_data do
+    
+    PeerTracker.list_peer_pids()
+      |> Enum.map(fn pid -> 
+        Logger.warn "Removing Peer: #{inspect(pid)}"
+        EsprezzoCore.PeerNet.PeerTracker.remove_peer(pid)
+      end)
+  end
+
+
+  defp schedule_restart_peer_connections() do
+    Process.send_after(self(), :restart_peer_connections, 10000)
   end
  
 
