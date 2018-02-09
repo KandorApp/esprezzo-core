@@ -7,6 +7,7 @@ defmodule EsprezzoCoreWeb.BlockController do
 
   plug :put_layout, false
 
+  @spec index(Plug.Conn.t, term) :: Plug.Conn.t
   def index(conn, params) do
     page = case params["page"] do
       nil -> 1
@@ -34,4 +35,13 @@ defmodule EsprezzoCoreWeb.BlockController do
     |> put_status(:ok)
     |> json %{blocks: page}
   end
+
+  @spec show(Plug.Conn.t, term) :: Plug.Conn.t
+  def show(conn, params) do
+    block = Blockchain.get_block(params["hash"])
+    conn
+    |> put_status(:ok)
+    |> json %{block: block}
+  end
+
 end

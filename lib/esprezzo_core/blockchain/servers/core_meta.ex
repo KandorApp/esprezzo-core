@@ -295,7 +295,16 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
       
   end
 
+  @spec get_block(String.t) :: term
+  def get_block(hash) do
+    GenServer.call(__MODULE__, {:get_block, hash}, :infinity)
+  end
+  def handle_call({:get_block, hash}, _from, state) do
+    block = Map.get(state.blocks, hash)
+    {:reply, block, state}
+  end
 
+  @spec genesis_block() :: term
   def genesis_block do
     GenServer.call(__MODULE__, :genesis_block, :infinity)
   end
