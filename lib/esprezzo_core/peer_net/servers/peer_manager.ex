@@ -36,7 +36,7 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
       "Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
     end)
     #schedule_restart_peer_connections()
-    schedule_maintain_peer_connections()
+    #schedule_maintain_peer_connections()
     {:ok, %{
       :authorized_peers => [],
       :connected_peers => connected_peers,
