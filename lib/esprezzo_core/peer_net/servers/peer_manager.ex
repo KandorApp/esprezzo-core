@@ -2,13 +2,21 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   @moduledoc """
   Genserver container that aggregates and exposes 
   data from all peer connections.
+
+  This exists to hold data as opposed to being
+  the Supervisor as seen in PeerSupervisor.
+  Clearer definitons are needed for these.
+
+  Instead of holding them 1 for 1 this library holds
+  the container Supervisor and is the main data repo
+  for peer connections
   """
 
   use GenServer
   require Logger
   require IEx
   alias EsprezzoCore.PeerNet
-  alias EsprezzoCore.PeerNet.PeerTracker
+  alias EsprezzoCore.PeerNet.PeerSupervisor
   @doc """
   Setup
   """
@@ -159,7 +167,7 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
 
   """
   def refresh_peer_data do
-    PeerTracker.list_peer_pids()
+    PeerSupervisor.list_peer_pids()
       |> Enum.map(fn pid -> 
         EsprezzoCore.PeerNet.Peer.peer_state(pid)
       end)
@@ -167,10 +175,10 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
 
   def destroy_peer_data do
     
-    PeerTracker.list_peer_pids()
+    PeerSupervisor.list_peer_pids()
       |> Enum.map(fn pid -> 
         Logger.warn "Removing Peer: #{inspect(pid)}"
-        EsprezzoCore.PeerNet.PeerTracker.remove_peer(pid)
+        EsprezzoCore.PeerNet.PeerSupervisor.remove_peer(pid)
       end)
   end
 

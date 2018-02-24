@@ -1,7 +1,7 @@
 defmodule EsprezzoCore.PeerNet do
   require IEx
 
-  alias EsprezzoCore.PeerNet.PeerTracker
+  alias EsprezzoCore.PeerNet.PeerSupervisor
   alias EsprezzoCore.PeerNet.Client
   alias EsprezzoCore.PeerNet.Peer
   alias EsprezzoCore.PeerNet.WireProtocol.Commands
@@ -9,14 +9,14 @@ defmodule EsprezzoCore.PeerNet do
   EsprezzoCore.PeerNet.peers
   """
   def peers do
-    PeerTracker.list_peer_pids()
+    PeerSupervisor.list_peer_pids()
   end
 
   """
   EsprezzoCore.PeerNet.count_peers
   """
   def count_peers do
-    PeerTracker.count_peers()
+    PeerSupervisor.count_peers()
   end
 
   """

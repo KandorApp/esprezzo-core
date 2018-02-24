@@ -1,7 +1,7 @@
 defmodule EsprezzoCore.PeerNet.Client do
   require Logger
   require IEx
-  alias EsprezzoCore.PeerNet.PeerTracker
+  alias EsprezzoCore.PeerNet.PeerSupervisor
 
   @doc"""
   EsprezzoCore.PeerNet.Client.connect("127.0.0.1", 30343)
@@ -16,7 +16,7 @@ defmodule EsprezzoCore.PeerNet.Client do
     tcp_options = [:binary, {:packet, 4}, active: true, reuseaddr: true]
     case :gen_tcp.connect({a, b, c, d}, port, tcp_options) do
       {:ok, socket} ->  
-        {:ok, pid} = PeerTracker.add_peer(socket, :gen_tcp, node_uuid)
+        {:ok, pid} = PeerSupervisorTracker.add_peer(socket, :gen_tcp, node_uuid)
         :gen_tcp.controlling_process(socket, pid)
         {:ok, pid}
       {:error, reason} ->

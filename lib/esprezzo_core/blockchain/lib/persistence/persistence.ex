@@ -8,7 +8,8 @@ defmodule EsprezzoCore.Blockchain.Persistence do
   @doc """
     EsprezzoCore.Blockchain.Persistence.clear_blocks
     EsprezzoCore.Blockchain.Settlement.CoreChain.reinitialize()
-  """
+    EsprezzoCore.Blockchain.Persistence.clear_all()
+    """
   def clear_all do
     clear_blocks()
     clear_transactions()

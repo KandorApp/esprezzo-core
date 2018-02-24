@@ -43,4 +43,5 @@ config :esprezzo_core, EsprezzoCore.Repo,
   password: "postgres",
   database: "esprezzo_core_dev",
   hostname: "localhost",
-  pool_size: 10
+  pool_size: 10,
+  timeout: 15_000
