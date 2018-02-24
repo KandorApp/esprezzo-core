@@ -5,13 +5,10 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
 
   This exists to hold data as opposed to being
   the Supervisor as seen in PeerSupervisor.
-  Clearer definitons are needed for these.
 
-  Instead of holding them 1 for 1 this library holds
-  the container Supervisor and is the main data repo
-  for peer connections
+  This library accesses the Supervisor and is the 
+  main data repo for peer connections
   """
-
   use GenServer
   require Logger
   require IEx
@@ -38,7 +35,8 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     Logger.warn(fn ->
       "Connected to #{EsprezzoCore.PeerNet.count_peers} peers"
     end)
-    schedule_restart_peer_connections()
+    #schedule_restart_peer_connections()
+    schedule_maintain_peer_connections()
     {:ok, %{
       :authorized_peers => [],
       :connected_peers => connected_peers,
@@ -174,7 +172,6 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
   end
 
   def destroy_peer_data do
-    
     PeerSupervisor.list_peer_pids()
       |> Enum.map(fn pid -> 
         Logger.warn "Removing Peer: #{inspect(pid)}"
@@ -187,5 +184,8 @@ defmodule EsprezzoCore.PeerNet.PeerManager do
     Process.send_after(self(), :restart_peer_connections, 10000)
   end
  
+  defp schedule_maintain_peer_connections() do
+    Process.send_after(self(), :notify_peers_with_status, 10000)
+  end
 
 end

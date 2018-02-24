@@ -3,6 +3,8 @@ defmodule EsprezzoCore.PeerNet.PeerSupervisor do
   Supervisor whos only job is to acts as a container
   for a group of peer connection processes.
   Need to be more clear on the separation between this and the PeerManager..
+  Started by main supervisor
+  Accessed by PeerManager
   """
   use Supervisor
   alias EsprezzoCore.PeerNet.Peer
