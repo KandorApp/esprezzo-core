@@ -30,7 +30,7 @@ defmodule EsprezzoCore.Mixfile do
   def application do
     [
       mod: {EsprezzoCore.Application, []},
-      extra_applications: [:logger, :runtime_tools, :edeliver],
+      extra_applications: [:logger, :runtime_tools, :edeliver, :corsica],
     ]
   end
 

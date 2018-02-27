@@ -37,6 +37,8 @@ defmodule EsprezzoCoreWeb.Endpoint do
     store: :cookie,
     key: "_esprezzo_core_key",
     signing_salt: "uPQn09w4"
+  
+  plug Corsica, origins: "*"
 
   plug EsprezzoCoreWeb.Router
 
