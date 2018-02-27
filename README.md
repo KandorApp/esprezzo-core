@@ -32,6 +32,41 @@ To start your EsprezzoCore server (Development):
 
 ## Testing
 $ `MIX_ENV=test mix test`
+`
+EsprezzoCoreWeb.ErrorViewTest
+  * test render any other (4.5ms)
+  * test render 500.json (0.5ms)
+  * test renders 404.json (0.3ms)
+
+  EsprezzoCore.GenesisTest
+  * test genesis block hash validates (0.6ms)
+  * test genesis block saves and returns (10.3ms)
+  * test transaction validators succeed on genesis block (0.6ms)
+  * test genesis txn merkle root validates (0.5ms)
+
+EsprezzoCore.SigningTest
+  * test correctly creates pubkey from privkey with ecdsa (6.0ms)
+  * test correctly decodes txn with native atoms (4.6ms)
+  * test correctly decodes and verifies signature with public key and private keys stored as Base16 (1.9ms)
+  * test correctly fails signature verification (14.0ms)
+  * test bin and hex private keys match (0.00ms)
+  * test correctly creates and verifies signature (5.3ms)
+
+EsprezzoCore.HashTest
+  * test correctly encodes md5 (0.05ms)
+  * test correctly encodes sha224 (0.02ms)
+  * test correctly encodes sha512 (0.04ms)
+  * test correctly encodes sha384 (0.01ms)
+  * test correctly encodes sha256 (0.01ms)
+
+EsprezzoCore.Base58CheckTest
+  * test correctly encodes (0.07ms)
+
+
+Finished in 0.1 seconds
+20 tests, 0 failures
+`
+
 ## Dialyzer
 Dialyzer is a code quality and static analysis tool for Erlang bytecode.
 It helps prevent errors and type mismatches. We make extensive use of type hints eg:
