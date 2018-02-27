@@ -1,6 +1,6 @@
 # Cryptography Roadmap - [Notes, Definitions, Technical References and Code Citations]
 
-## Definitions of Address format, Key format, Public and Private Keys, Addresses and Public Hash generation process and associated Cryptographic Components related to the Core Ledger and Compatible Wallets. 
+Definitions of Address format, Key format, Public and Private Keys, Addresses and Public Hash generation process and associated Cryptographic Components related to the Core Ledger and Compatible Wallets. 
 
 ### Public Key Cryptography
 Public key cryptography was invented in the 1970s and is a mathematical foundation for computer and information security.
@@ -129,11 +129,11 @@ public-key values of this deterministic sequence without
 knowing their corresponding private-keys (and with no need to
 access the master seed or any other highly sensitive data).
 
-
 ### TODO: Wallet Import Format/Storage
+Define wallet file/storage format.
+
 
 ### References:
-
 Pbkdf2 is a well-tested password-based key derivation function that can be configured to remain slow and resistant to brute-force attacks even as computational power increases.
 
 Mastering Bitcoin by Andreas M. Antonopoulos: (https://github.com/bitcoinbook/bitcoinbook/tree/second_edition)
@@ -154,6 +154,4 @@ https://bitcoin.stackexchange.com/questions/9202/why-does-bitcoin-use-two-hash-f
 
 https://en.bitcoin.it/wiki/Wallet_import_format
 
-RLP: https://github.com/exthereum/ex_rlp/tree/master/lib/ex_rlp
-
-ecdsa math: https://www.cryptocompare.com/wallets/guides/how-do-digital-signatures-in-bitcoin-work/
+ecdsa: https://www.cryptocompare.com/wallets/guides/how-do-digital-signatures-in-bitcoin-work/
