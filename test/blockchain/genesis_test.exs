@@ -33,9 +33,12 @@ defmodule EsprezzoCore.GenesisTest do
   end
 
   test "genesis block saves and returns" do
-    gb = EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis.reinitialize()
-    IEx.pry
-    assert false
+    case EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis.reinitialize() do
+      {:ok, gb} ->
+        assert gb.block_number == 0
+      _ -> 
+        assert false
+     end
   end
 
 

@@ -31,7 +31,7 @@ To start your EsprezzoCore server (Development):
   * Start EsprezzoCore with interactive console `iex -S mix esp.start`
 
 ## Testing
-
+$ `MIX_ENV=test mix test`
 ## Dialyzer
 Dialyzer is a code quality and static analysis tool for Erlang bytecode.
 It helps prevent errors and type mismatches. We make extensive use of type hints eg:

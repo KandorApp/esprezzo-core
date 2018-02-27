@@ -2,11 +2,6 @@
 
 Discovery achieved through a terse peer to peer tcp messaging protocol. The goal of this layer is to establish and maintain a map of network connections along with their state and connection status.
 
-Packet types
-### Ping
-### Pong
-### Neighbors 
-
 ### Application handshake Protocol
 Upon Discovery each peer must send a HELLO message with the follwoing data
 ### HELLO
