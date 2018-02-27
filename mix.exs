@@ -54,7 +54,8 @@ defmodule EsprezzoCore.Mixfile do
       {:distillery, "~> 1.5", runtime: false},
       {:secure_random, "~> 0.5"},
       {:mnemonic, "~> 0.2.0"},
-      {:apex, "~>1.2.0"}
+      {:apex, "~>1.2.0"},
+      {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
 
