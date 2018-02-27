@@ -32,6 +32,8 @@ To start your EsprezzoCore server (Development):
 
 ## Testing
 To run the test suite execute the following command and expect the result shown below.
+
+
 $ `MIX_ENV=test mix test`
 
 
