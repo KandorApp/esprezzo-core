@@ -31,6 +31,7 @@ To start your EsprezzoCore server (Development):
   * Start EsprezzoCore with interactive console `iex -S mix esp.start`
 
 ## Testing
+To run the test suite execute the following command and expect the result shown below.
 $ `MIX_ENV=test mix test`
 
 
