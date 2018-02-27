@@ -1,6 +1,17 @@
 # EsprezzoCore
 Esprezzo core is an implementation of the ESP P2P payment and data distribution protocol. This implementation offers a multichain fabric that allows for an unlimited number of application specific sidechains as well as a global cryptocurrency ledger. The design of the core settlement layer is a UTXO style ledger. The sidechains are designed specifically for high throughput data delivery and ephemeral storage.
 
+## Contents
+- [Design Theory]()
+- [Peer to Peer Protocol]()
+- [Cryptography]()
+- [Blockchain]()
+- [Blocks and Transactions]()
+- [Consensus]()
+- [Forging and Staking]()
+- [Deployment Tooling]()
+- [Additional FAQ ]()
+
 # Installation Requirements
 There are several dependencies required to run a full network node. They are fairly commonplace items in the Linux/Unix community and should be manageable by anyone with Sysadmin/DevOps experience.
 
@@ -35,7 +46,6 @@ To run the test suite execute the following command and expect the result shown 
 
 
 $ `MIX_ENV=test mix test`
-
 
 ```
 EsprezzoCoreWeb.ErrorViewTest
