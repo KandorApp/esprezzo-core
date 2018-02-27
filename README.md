@@ -32,8 +32,9 @@ To start your EsprezzoCore server (Development):
 
 ## Testing
 $ `MIX_ENV=test mix test`
-`
-EsprezzoCoreWeb.ErrorViewTest
+
+
+`EsprezzoCoreWeb.ErrorViewTest
   * test render any other (4.5ms)
   * test render 500.json (0.5ms)
   * test renders 404.json (0.3ms)
@@ -64,8 +65,7 @@ EsprezzoCore.Base58CheckTest
 
 
 Finished in 0.1 seconds
-20 tests, 0 failures
-`
+20 tests, 0 failures`
 
 ## Dialyzer
 Dialyzer is a code quality and static analysis tool for Erlang bytecode.
