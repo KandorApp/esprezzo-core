@@ -47,7 +47,7 @@ defmodule EsprezzoCore.Blockchain.Settlement.CoreChain.Genesis do
         case Persistence.persist_block(genesis_block) do
           {:ok, block} -> 
             Logger.warn "Genesis Block Saved"
-            # EsprezzoCore.Blockchain.CoreMeta.push_block(sanitize(block))
+            EsprezzoCore.Blockchain.CoreMeta.push_block(sanitize(block))
             {:ok, block}
           {:error, changeset} ->
             Logger.error "Failed To Persist Genesis Block"
