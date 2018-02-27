@@ -2,15 +2,15 @@
 Esprezzo core is an implementation of the ESP P2P payment and data distribution protocol. This implementation offers a multichain fabric that allows for an unlimited number of application specific sidechains as well as a global cryptocurrency ledger. The design of the core settlement layer is a UTXO style ledger. The sidechains are designed specifically for high throughput data delivery and ephemeral storage.
 
 ## Contents
-- [Design Theory]()
-- [Peer to Peer Protocol]()
-- [Cryptography]()
-- [Blockchain]()
-- [Blocks and Transactions]()
-- [Consensus]()
-- [Forging and Staking]()
-- [Deployment Tooling]()
-- [Additional FAQ ]()
+- [Design Theory](https://github.com/esprezzo/esprezzo-core/blob/master/README-1-Rationale.md)
+- [Peer to Peer Protocol](https://github.com/esprezzo/esprezzo-core/blob/master/README-2-PeerToPeerProtocol.md)
+- [Cryptography](https://github.com/esprezzo/esprezzo-core/blob/master/README-3-Crypto.md)
+- [Blockchain](https://github.com/esprezzo/esprezzo-core/blob/master/README-4-Blockchain.md)
+- [Blocks and Transactions](https://github.com/esprezzo/esprezzo-core/blob/master/README-5-Blocks%2BTransactions.md)
+- [Consensus](https://github.com/esprezzo/esprezzo-core/blob/master/README-6-Consensus.md)
+- [Forging and Staking](https://github.com/esprezzo/esprezzo-core/blob/master/README-7-Forging%2BStaking.md)
+- [Deployment Tooling](https://github.com/esprezzo/esprezzo-core/blob/master/README-8-Deployment.md)
+- [Additional FAQ ](https://github.com/esprezzo/esprezzo-core/blob/master/README-9-FAQ.md)
 
 # Installation Requirements
 There are several dependencies required to run a full network node. They are fairly commonplace items in the Linux/Unix community and should be manageable by anyone with Sysadmin/DevOps experience.
