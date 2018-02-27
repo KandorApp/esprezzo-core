@@ -176,11 +176,12 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
   end
   def handle_call({:get_n_blocks, start_index, count}, _from, state) do
     range = start_index..(start_index + (count - 1))
-    headers = Map.take(state.block_height_index, range)
+    revblocks = Enum.reverse(state.block_height_index)
+    headers = Map.take(revblocks, range)
     blocks = 
       Map.take(state.blocks, Map.values(headers))
       |> Map.values() 
-      |> Enum.sort(&(&1.block_number <= &2.block_number))
+      |> Enum.sort(&(&2.block_number <= &1.block_number))
 
     {:reply, blocks, state}
   end
