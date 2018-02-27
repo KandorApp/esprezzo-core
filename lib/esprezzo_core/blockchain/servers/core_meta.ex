@@ -175,9 +175,16 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
     GenServer.call(__MODULE__, {:get_n_blocks, start_index, count}, :infinity)
   end
   def handle_call({:get_n_blocks, start_index, count}, _from, state) do
+    
+    height = Enum.count(state.block_height_index)
+    revblocks = state.block_index |> Enum.reverse
+   
     range = start_index..(start_index + (count - 1))
-    revblocks = Enum.reverse(state.block_height_index)
-    headers = Map.take(revblocks, range)
+
+    IEx.pry
+    
+    headers = Enum.slice(revblocks, range)
+
     blocks = 
       Map.take(state.blocks, Map.values(headers))
       |> Map.values() 
