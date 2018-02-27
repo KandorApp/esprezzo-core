@@ -1,4 +1,9 @@
-Usage:
+# Deployment Tooling
+
+We have included some tooling to aid in the setup and maintenance of full nodes. 
+
+### Usage:
+```
   edeliver <build-command|deploy-command|node-command|local-command> command-info [Options]
   edeliver --help|--version
   edeliver help <command>
@@ -53,3 +58,5 @@ Miscellaneous:
 
   BUILD_HOST=build-2.acme.com edeliver build release
   GIT_CLEAN_PATHS='_build rel priv/generated' edeliver build release
+
+  ```

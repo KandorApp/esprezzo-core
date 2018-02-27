@@ -1,9 +1,12 @@
 # Forging Overview
 
-## PoW and PoS
+Esprezzo core uses light Proof-of-work under the hood but is essentially a Proof-of-Stake system with blocktimes <10s
 
-## Block Time
+## TODO 
+- PoW and PoS
 
-## Emission Schedule
+- Block Time
 
-## Forging Rewards
+- Emission Schedule
+
+- Forging Rewards

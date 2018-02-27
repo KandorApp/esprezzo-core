@@ -25,10 +25,5 @@ The core protocol should remain simple and serve as a datasource/market and a re
 # Blockchains and Sidechains
 The core ledger uses a UTXO model as seen in bitcoin, monero etc. This ledger exists only to store and transfer value. Sidechain/Application data does not require UTXO as actions that transfer value are settled on the main ledger. The secondary chains should be designed for performant data access and focus on minimizing storage requirements.
 
-## Why UTXO?
-
-## How do we store data?
-
-## How do we serialize data?
-Data on the wire is serialized as simple binary JSON and checked/validated/decoded by the application...
+Data on the wire is serialized as simple binary JSON and checked/validated/decoded by the application.
 
