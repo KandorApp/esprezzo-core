@@ -1,5 +1,5 @@
 # EsprezzoCore
-Esprezzo core is an implementation of the ESP P2P payment and data distribution protocol. This implementation offers a multichain fabric that allows for an unlimited number of application specific sidechains as well as a global cryptocurrency ledger. The design of the core settlement layer is a UTXO style ledger. The sidechains are designed specifically for high speed data delivery and ephemeral storage.
+Esprezzo core is an implementation of the ESP P2P payment and data distribution protocol. This implementation offers a multichain fabric that allows for an unlimited number of application specific sidechains as well as a global cryptocurrency ledger. The design of the core settlement layer is a UTXO style ledger. The sidechains are designed specifically for high throughput data delivery and ephemeral storage.
 
 # Installation Requirements
 There are several dependencies required to run a full network node. They are fairly commonplace items in the Linux/Unix community and should be manageable by anyone with Sysadmin/DevOps experience.
