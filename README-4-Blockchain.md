@@ -1,10 +1,6 @@
-# Core Ledger
+# Core Ledger / UTXO Overview
 
-# Pay to Public Key Hash or "Pay to EZP Address"
-
-## Definitions
-
-In a bitcoin transaction, the “Public Key Hash” is synonymous to a “bitcoin address”. (A bitcoin address is derived from a the hash of your public key for the technically minded).
+In a transaction, the “Public Key Hash” is synonymous to a “EZP address”. (An address is derived from a the hash of your public key).
  
 P2PKH is therefore an instruction on the blockchain to transfer ownership from the current owner to the new owner of the bitcoin address.
 
@@ -31,7 +27,6 @@ Gas: Charge by opcode event?
 Bob provides the pubkey hash to Alice. Pubkey hashes are almost always sent encoded as Bitcoin addresses, which are base58-encoded strings containing an address version number, the hash, and an error-detection checksum to catch typos. The address can be transmitted through any medium, including one-way mediums which prevent the spender from communicating with the receiver, and it can be further encoded into another format, such as a QR code containing a bitcoin: URI.
 
 Once Alice has the address and decodes it back into a standard hash, she can create the first transaction. She creates a standard P2PKH transaction output containing instructions which allow anyone to spend that output if they can prove they control the private key corresponding to Bob’s hashed public key. These instructions are called the pubkey script or scriptPubKey.
-
 
 
 Alan wants to send Remy 5 EZP
@@ -124,4 +119,4 @@ Tragedy of the Commons
 NOTE: http://chainhash.com/
 
 
-# Sidechain Design
+# TODO Sidechain Design
