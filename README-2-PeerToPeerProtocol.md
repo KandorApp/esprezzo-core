@@ -1,11 +1,6 @@
-# Wire Protocol Overview
-I Can Text You A Pile of Poo, But I Can’t Write My Name
-https://modelviewculture.com/pieces/i-can-text-you-a-pile-of-poo-but-i-cant-write-my-name
+# P2P Discovery Protocol Overview
 
-
-## Node Discovery Protocol
-Discovers nodes to connect to
-Small, Fast binary wire Protocol
+Discovery achieved through a terse peer to peer tcp messaging protocol. The goal of this layer is to establish and maintain a map of network connections along with their state and connection status.
 
 Packet types
 ### Ping

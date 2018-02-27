@@ -5,8 +5,20 @@ defmodule EsprezzoCore.PeerNet.Peer do
   require Logger
   require IEx
 
+  
   alias EsprezzoCore.PeerNet.WireProtocol.MessageHandlers
 
+  """
+  So this is a little weird
+  should I send status from each independent peer
+  -or-
+  schedule a group send in the manager server
+  right now it's sending status from the manager
+  should it send a ping and reconnect?
+  we can't really wait for a ping as they r async
+  right now sockets are maintaining connections perfectly
+  but let's see what happens when we have spotty/intermittent network connectivity
+  """
   def start_link(_, config) do
     GenServer.start_link(__MODULE__, config)
   end
