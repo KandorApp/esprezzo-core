@@ -10,9 +10,9 @@ that seeks to achieve fast and cheap trnsactions as well as web scale data acces
 
 1. The core/full node should remain as simple as possible and provide only two things. 
 
-- The core ledger should be an immutable record of transactions where permissions are managed by tried and tested Public Key Encryption methods.
+  - The core ledger should be an immutable record of transactions where permissions are managed by tried and tested Public Key Encryption methods.
 
-- Sidechains should be application specific and should be expirable when no longer needed. 
+  - Sidechains should be application specific and should be expirable when no longer needed. 
 
 
 2. Users should not pay exhorbitant fees to store application data on the blockchain and bloat should be mitigated by the use of paralell chains for application and ephemeral data.
