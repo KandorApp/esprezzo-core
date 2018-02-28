@@ -8,16 +8,16 @@ that seeks to achieve fast and cheap trnsactions as well as web scale data acces
 
 # Core Principles
 
-1. The core/full node should remain as simple as possible and provide only two things. 
+### The core/full node should remain as simple as possible and provide only two things. 
 
-  - The core ledger should be an immutable record of transactions where permissions are managed by tried and tested Public Key Encryption methods.
+  1. The core ledger should be an immutable record of transactions where permissions are managed by tried and tested Public Key Encryption methods.
 
-  - Sidechains should be application specific and should be expirable when no longer needed. 
+  2.  Sidechains should be application specific and should be expirable when no longer needed. 
 
 
-2. Users should not pay exhorbitant fees to store application data on the blockchain and bloat should be mitigated by the use of paralell chains for application and ephemeral data.
+### Users should not pay exhorbitant fees to store application data on the blockchain and bloat should be mitigated by the use of paralell chains for application and ephemeral data.
 
-3. Smart contracts should be limited in scope and complexity should pushed to middle tier ie: middleware/application layer programs.
+### Smart contracts should be limited in scope and complexity should pushed to middle tier ie: middleware/application layer programs.
 
 The core protocol should remain simple and serve as a datasource/market and a record of value exchange. No application specific feautures should be allowed to creep into the core protocol although users are free to write solutions that rely on the protocol.
 
