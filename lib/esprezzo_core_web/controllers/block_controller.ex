@@ -29,6 +29,7 @@ defmodule EsprezzoCoreWeb.BlockController do
       1 -> 0
       n -> (n - 1) * limit
     end
+    IEx.pry
     page = Blockchain.get_blocks(start, limit)
 
     conn
