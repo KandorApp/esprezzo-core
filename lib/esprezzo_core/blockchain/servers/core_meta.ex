@@ -247,7 +247,7 @@ defmodule EsprezzoCore.Blockchain.CoreMeta do
           {:ok, block} -> 
             Logger.warn "Storing Block Candidate for height: #{Enum.count(state.block_index)}"
             Logger.warn "Adding Block #{block.header_hash}"
-            block_index = state.block_index ++ [block.header_hash]
+            block_index = [block.header_hash] ++ state.block_index
             txn_index = case state.txn_index  do
               [] -> [ChainBuilder.build_txn_index(block.txns)]
               nil -> [ChainBuilder.build_txn_index(block.txns)]
