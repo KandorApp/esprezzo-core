@@ -11,6 +11,8 @@ defmodule EsprezzoCoreWeb.BlockController do
   def index(conn, params) do
     page = case params["page"] do
       nil -> 1
+      0 -> 1
+      "0" -> 1
       p when is_integer(p) -> p
       p -> 
         {n, _} = Integer.parse(p)
